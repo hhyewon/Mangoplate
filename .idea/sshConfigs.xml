@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="SshConfigs">
+    <configs>
+      <sshConfig host="3.35.141.16" id="18ac59c5-27a6-4d49-8f2c-5da449a420f8" keyPath="C:\awskey\10th_server_a.pem" port="22" nameFormat="DESCRIPTIVE" username="ubuntu" />
+    </configs>
+  </component>
+</project>
