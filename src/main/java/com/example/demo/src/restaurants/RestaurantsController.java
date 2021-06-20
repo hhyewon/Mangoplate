@@ -2,6 +2,8 @@ package com.example.demo.src.restaurants;
 
 import com.example.demo.config.BaseException;
 import com.example.demo.config.BaseResponse;
+import com.example.demo.src.restaurants.model.GetRestaurantRes;
+import com.example.demo.src.restaurants.model.PatchRestaurantRes;
 import com.example.demo.src.user.UserProvider;
 import com.example.demo.src.user.UserService;
 import com.example.demo.src.user.model.GetUserRes;
@@ -9,19 +11,15 @@ import com.example.demo.utils.JwtService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/restaurants")
-
-
 public class RestaurantsController {
     final Logger logger = LoggerFactory.getLogger(this.getClass());
+
 
     @Autowired
     private final RestaurantsProvider restaurantsProvider;
@@ -34,7 +32,7 @@ public class RestaurantsController {
     }
 
     /**
-     * 레스토랑 전체보기 API
+     * 식당 조회 API
      * [GET] /restaurants
      * 회원 번호 및 이메일 검색 조회 API
      * [GET] /restaurants? RestaurantId=
@@ -42,19 +40,61 @@ public class RestaurantsController {
      */
 
     @GetMapping("") // (GET) 127.0.0.1:9000/restaurants
-    public BaseResponse<List<GetUserRes>> getUsers(@RequestParam(required = false) String Email) {
+    public BaseResponse<List<GetRestaurantRes>> getRestaurants() {
         try{
-            if(Email == null){
-                List<GetUserRes> getUsersRes = userProvider.getUsers();
-                return new BaseResponse<>(getUsersRes);
-            }
+
+                List<GetRestaurantRes> getRestaurantRes = restaurantsProvider.getRestaurants();
+                return new BaseResponse<>(getRestaurantRes);
+
             // Get Users
-            List<GetUserRes> getUsersRes = userProvider.getUsersByEmail(Email);
-            return new BaseResponse<>(getUsersRes);
+//            List<GetRestaurantRes> getRestaurantRes = restaurantsProvider.getRestaurantByRestaurantName(restaurantId);
+//            return new BaseResponse<>(getRestaurantRes);
         } catch(BaseException exception){
             return new BaseResponse<>((exception.getStatus()));
         }
     }
+
+    /**
+     * 식당 상세 조회 API
+     * [GET] /restaurants/:restaurantId
+     * @return BaseResponse<GetUserRes>
+     */
+    // Path-variable
+//    @ResponseBody
+//    @GetMapping("/{restaurantId}") // (GET) 127.0.0.1:9000/app/users/:userIdx
+//    public BaseResponse<GetRestaurantRes> getRestaurant(@PathVariable("restaurantId") int id) {
+//        // Get Users
+//        try{
+//            GetRestaurantRes getRestaurantRes = restaurantsProvider.getRestaurant(id);
+//            return new BaseResponse<>(getRestaurantRes);
+//        } catch(BaseException exception){
+//            return new BaseResponse<>((exception.getStatus()));
+//        }
+//
+//    }
+
+//    @ResponseBody
+//    @RestController
+//    public class hello{
+
+    @GetMapping("/hello")
+    @ResponseBody
+    public String hello(){
+        logger.debug("/hello");
+        return "h";
+    }
+//}
+
+
+
+//    @PatchMapping("/{restaurantId}/like")
+//    public BaseResponse<PatchRestaurantRes> patchRestaurantRes(@PathVariable int likeId) {
+//        try {
+//            return new BaseResponse<>(SUCCESS_PUT_LIKED_ON_ALBUM, albumService.createLikeOnAlbumById(albumId, request));
+//        } catch (IllegalArgumentException e) {
+//            return new BaseResponse<>(NOT_FOUND_ALBUM);
+//        }
+//    }
 
 
 

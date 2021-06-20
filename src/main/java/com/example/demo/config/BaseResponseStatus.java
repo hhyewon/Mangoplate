@@ -11,6 +11,7 @@ public enum BaseResponseStatus {
      * 1000 : 요청 성공
      */
     SUCCESS(true, 1000, "요청에 성공하였습니다."),
+    SUCCESS_GET_RESTAURANTS(true, 1001, "식당 전체보기에 성공하였습니다."),
 
 
     /**
@@ -31,6 +32,14 @@ public enum BaseResponseStatus {
     POST_USERS_EXISTS_EMAIL(false,2017,"중복된 이메일입니다."),
 
 
+    // [POST] /reviews
+    POST_REVIEWS_EMPTY_COMMENT(false, 2018, "comment에 내용을 입력해주세요."),
+    POST_REVIEWS_EMPTY_SCORE(false, 2019, "score에 평점을 입력해주세요."),
+    POST_REVIEWS_INVALID_COMMENT(false, 2020, "comment는 10000자 이하로 입력해주세요."),
+    POST_REVIEWS_INVALID_SCORE(false, 2021, "score에 1과 3사이의 점수를 입력해주세요."),
+    POST_REVIEWS_INVALID_RESTAURANTID(false, 2022, "restaurantId에 정수를 입력해주세요."),
+    POST_REVIEWS_INVALID_REVIEWURL(false, 2023, "reviewUrl에 url형식으로 입력해주세요."),
+
 
     /**
      * 3000 : Response 오류
@@ -48,10 +57,18 @@ public enum BaseResponseStatus {
      * 4000 : Database, Server 오류
      */
     DATABASE_ERROR(false, 4000, "데이터베이스 연결에 실패하였습니다."),
+
     SERVER_ERROR(false, 4001, "서버와의 연결에 실패하였습니다."),
+    ERROR(false, 4002, "ff"),
 
     //[PATCH] /users/{userIdx}
     MODIFY_FAIL_USERNAME(false,4014,"유저네임 수정 실패"),
+
+    //[PATCH] /reviews/{reviewId}
+    MODIFY_FAIL_COMMENT(false,4015,"리뷰 내용 수정 실패"),
+    MODIFY_FAIL_SCORE(false,4016,"리뷰 점수 수정 실패"),
+    MODIFY_FAIL_REVIEWURL(false,4017,"리뷰 사진 수정 실패"),
+    MODIFY_FAIL_EMPTY(false,4018,"입력안된 값이 있습니다"),
 
     PASSWORD_ENCRYPTION_ERROR(false, 4011, "비밀번호 암호화에 실패하였습니다."),
     PASSWORD_DECRYPTION_ERROR(false, 4012, "비밀번호 복호화에 실패하였습니다.");

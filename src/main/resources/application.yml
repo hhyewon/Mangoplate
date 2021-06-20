@@ -7,7 +7,7 @@ spring:
 
   datasource:
     platform: mysql
-    url: jdbc:mysql://bonodb.cvb92yamcwsp.ap-northeast-2.rds.amazonaws.com/mangoplateDB?autoReconnect=true # 변경해주세요
+    url: jdbc:mysql://bonodb.cvb92yamcwsp.ap-northeast-2.rds.amazonaws.com/mangoplateDB?useSSL=false&autoReconnect=true # 변경해주세요
     username:  admin # 변경해주세요
     password:  admin1234 # 변경해주세요
     driver-class-name: com.mysql.cj.jdbc.Driver # mysql 8버전
