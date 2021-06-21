@@ -2,15 +2,15 @@
 <project version="4">
   <component name="WebServers">
     <option name="servers">
-      <webServer id="7e22522a-4aec-4821-a1d6-7e8cd3c22007" name="rp2" url="https://www.hiimhyewon.site">
-        <fileTransfer rootFolder="/var/www/bn-mangoplate" accessType="SFTP" host="3.35.141.16" port="22" sshConfigId="18ac59c5-27a6-4d49-8f2c-5da449a420f8" sshConfig="ubuntu@3.35.141.16:22 key" keyPair="true">
+      <webServer id="54b85d99-2303-4f1f-97a4-fb384b2de112" name="rp3" url="https://www.hiimhyewon.site">
+        <fileTransfer rootFolder="/var/www/mangoplateclone" accessType="SFTP" host="3.35.141.16" port="22" sshConfigId="18ac59c5-27a6-4d49-8f2c-5da449a420f8" sshConfig="ubuntu@3.35.141.16:22 key" keyPair="true">
           <advancedOptions>
             <advancedOptions dataProtectionLevel="Private" keepAliveTimeout="0" passiveMode="true" shareSSLContext="true" />
           </advancedOptions>
         </fileTransfer>
       </webServer>
-      <webServer id="54b85d99-2303-4f1f-97a4-fb384b2de112" name="rp3" url="https://www.hiimhyewon.site">
-        <fileTransfer rootFolder="/var/www/mangoplateclone" accessType="SFTP" host="3.35.141.16" port="22" sshConfigId="18ac59c5-27a6-4d49-8f2c-5da449a420f8" sshConfig="ubuntu@3.35.141.16:22 key" keyPair="true">
+      <webServer id="8e812212-a93f-484a-bfa3-ce8d251bf444" name="mango" url="https://www.hiimhyewon.site">
+        <fileTransfer rootFolder="/var/www/mangoplate" accessType="SFTP" host="3.35.141.16" port="22" sshConfigId="18ac59c5-27a6-4d49-8f2c-5da449a420f8" sshConfig="ubuntu@3.35.141.16:22 key" keyPair="true">
           <advancedOptions>
             <advancedOptions dataProtectionLevel="Private" keepAliveTimeout="0" passiveMode="true" shareSSLContext="true" />
           </advancedOptions>
