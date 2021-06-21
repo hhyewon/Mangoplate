@@ -1,13 +1,21 @@
 package com.example.demo.src.restaurants;
 
 import com.example.demo.config.BaseException;
+import com.example.demo.src.restaurants.model.GetRestaurantMenuRes;
 import com.example.demo.src.restaurants.model.GetRestaurantRes;
+import com.example.demo.src.restaurants.model.GetRestaurantsRes;
+import com.example.demo.src.restaurants.model.PatchRestaurantReq;
+import com.example.demo.src.user.model.GetUserRes;
+import com.example.demo.src.user.model.PatchUserReq;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
 import java.util.List;
+
+import static com.example.demo.config.BaseResponseStatus.DATABASE_ERROR;
+import static com.example.demo.config.BaseResponseStatus.MODIFY_FAIL_USERNAME;
 
 @Repository
 public class RestaurantsDao {
@@ -20,7 +28,7 @@ public class RestaurantsDao {
     }
 
 
-    public List<GetRestaurantRes> getRestaurants(){
+    public List<GetRestaurantsRes> getRestaurants(){
         String getRestaurantsQuery = "select Restaurant.id\n" +
                 "       ,restaurantName\n" +
                 "       ,firstUrl\n" +
@@ -61,7 +69,7 @@ public class RestaurantsDao {
                 "                          group by restaurantId) IsLike\n" +
                 "                         on Restaurant.id = IsLike.restaurantId";
         return this.jdbcTemplate.query(getRestaurantsQuery,
-                (rs,rowNum) -> new GetRestaurantRes(
+                (rs,rowNum) -> new GetRestaurantsRes(
                         rs.getInt("id"),
                         rs.getString("restaurantName"),
                         rs.getString("firstUrl"),
@@ -77,35 +85,91 @@ public class RestaurantsDao {
 
     }
 
-//    public List<GetRestaurantRes> getRestaurantByRestaurantName(String restaurantName){
-//        String getRestaurantByRestaurantNameQuery = "select * from Restaurant where restaurantName =?";
-//        String getRestaurantByRestaurantNameParams = restaurantName;
-//        return this.jdbcTemplate.query(getRestaurantByRestaurantNameQuery,
-//                (rs, rowNum) -> new GetRestaurantRes(
-//                        rs.getInt("restaurantId"),
-//                        rs.getString("restaurantName"),
-//                        rs.getString("restaurantLocation")),
-//                     //   rs.getString("views")),
-//                getRestaurantByRestaurantNameParams);
-//    }
 
-//    public GetRestaurantRes getRestaurant(int id) throws BaseException {
-//        String getRestaurantQuery = "select id, restaurantName, reviewUrl, restaurantLocation\n" +
-//                "from Restaurant\n" +
-//                "         left outer join Review on Review.restaurantId = Restaurant.id\n" +
-//                "         left outer join (select ReviewImage.reviewId, reviewUrl, min(id) as firstImageId\n" +
-//                "                          from ReviewImage\n" +
-//                "                          group by reviewId) RestaurantImage on RestaurantImage.reviewId = Review.id\n" +
-//                " where Restaurant.id=? \n";
-//        int getRestaurantParams = id;
-//        return this.jdbcTemplate.queryForObject(getRestaurantQuery,
-//                (rs, rowNum) -> new GetRestaurantRes(
-//                        rs.getInt("id"),
-//                        rs.getString("restaurantName"),
-//                        rs.getString("reviewUrl"),
-//                        rs.getString("location")),
-//                getRestaurantParams);
-//
-//    }
-//
+    public GetRestaurantRes getRestaurant(int id) throws BaseException {
+        String getRestaurantQuery = "select Restaurant.id\n" +
+                "     , firstUrl\n" +
+                "     , restaurantName\n" +
+                "     , restaurantLocation\n" +
+                "     , ifnull(totalViews, 0)   as totalViews\n" +
+                "     , ifnull(totalReviews, 0) as totalReviews\n" +
+                "     , round(rating, 2)        as rating\n" +
+                "     , ifnull(totalLike, 0)    as totalLike\n" +
+                "     , ifnull(isLike, 0)       as isLike\n" +
+                "     , ifnull(isVisited, 0)    as isVisited\n" +
+                "\n" +
+                "from Restaurant\n" +
+                "         left outer join (select ReviewImage.reviewId, reviewUrl as firstUrl\n" +
+                "                          from ReviewImage\n" +
+                "                                   inner join (select reviewId, min(id) as firstId\n" +
+                "                                               from ReviewImage\n" +
+                "                                               group by reviewId) firstImage\n" +
+                "                                              on ReviewImage.id = firstImage.firstId) MainImage\n" +
+                "                         on Restaurant.id = MainImage.reviewId\n" +
+                "         left outer join (select Review.restaurantId, count(*) as totalReviews\n" +
+                "                          from Review\n" +
+                "                          group by restaurantId) Reviewc\n" +
+                "                         on Restaurant.id = Reviewc.restaurantId\n" +
+                "         left outer join (select RestaurantViews.restaurantId, count(*) as totalViews\n" +
+                "                          from RestaurantViews\n" +
+                "                          group by restaurantId) View\n" +
+                "                         on Restaurant.id = View.restaurantId\n" +
+                "         left outer join (select RestaurantLike.restaurantId, count(*) as totalLike\n" +
+                "                          from RestaurantLike\n" +
+                "                          group by restaurantId) Liketable\n" +
+                "                         on Restaurant.id = Liketable.restaurantId\n" +
+                "         left outer join (select Review.restaurantId, AVG(score) as rating\n" +
+                "                          from Review\n" +
+                "                                   inner join ReviewScore on ReviewScore.reviewId = Review.id\n" +
+                "                          group by Review.restaurantId) Score\n" +
+                "                         on Score.restaurantId = Restaurant.id\n" +
+                "         left outer join (select RestaurantLike.restaurantId, RestaurantLike.userId, count(*) as isLike\n" +
+                "                          from RestaurantLike\n" +
+                "                          where userId = '1'\n" +
+                "                          group by restaurantId) IsLike\n" +
+                "                         on Restaurant.id = IsLike.restaurantId\n" +
+                "         left outer join (select RestaurantVisited.restaurantId, RestaurantVisited.userId, count(*) as isVisited\n" +
+                "                          from RestaurantVisited\n" +
+                "                          where userId = '1'\n" +
+                "                          group by restaurantId) IsVisited\n" +
+                "                         on Restaurant.id = IsVisited.restaurantId\n" +
+                "where Restaurant.id=?";
+        int getRestaurantParams = id;
+        return this.jdbcTemplate.queryForObject(getRestaurantQuery,
+                (rs, rowNum) -> new GetRestaurantRes(
+                        rs.getInt("id"),
+                        rs.getString("restaurantName"),
+                        rs.getString("firstUrl"),
+                        rs.getString("restaurantLocation"),
+                        rs.getInt("totalViews"),
+                        rs.getInt("totalReviews"),
+                        rs.getFloat("rating"),
+                        rs.getInt("isLike"),
+                        rs.getInt("isVisited")),
+                getRestaurantParams);
+
+    }
+
+    public GetRestaurantMenuRes getRestaurantMenu(int restaurantId){
+        String getRestaurantMenuQuery = "select * from RestaurantMenu where restaurantId = ?";
+        int getRestaurantMenuParams = restaurantId;
+        System.out.println("3");
+        return this.jdbcTemplate.queryForObject(getRestaurantMenuQuery,
+                (rs, rowNum) -> new GetRestaurantMenuRes(
+                        rs.getInt("restaurantId"),
+                        rs.getString("menuName"),
+                        rs.getInt("price"),
+                        rs.getString("nickName")),
+                getRestaurantMenuParams);
+    }
+
+
+
+
+    public int patchRestaurantLike(PatchRestaurantReq patchRestaurantReq){
+        String modifyRestaurantLikeQuery = "update RestaurantLike set status =? where userId =? AND restaurantId = ?; ";
+        Object[] modifyRestaurantLikeParams = new Object[]{patchRestaurantReq.getRestaurantId(), patchRestaurantReq.getUserId(),patchRestaurantReq.getStatus()};
+
+        return this.jdbcTemplate.update(modifyRestaurantLikeQuery,modifyRestaurantLikeParams);
+    }
 }

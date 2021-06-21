@@ -2,7 +2,9 @@ package com.example.demo.src.restaurants;
 
 
 import com.example.demo.config.BaseException;
+import com.example.demo.src.restaurants.model.GetRestaurantMenuRes;
 import com.example.demo.src.restaurants.model.GetRestaurantRes;
+import com.example.demo.src.restaurants.model.GetRestaurantsRes;
 import com.example.demo.utils.JwtService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,31 +33,36 @@ public class RestaurantsProvider {
         this.jwtService = jwtService;
     }
 
-    public List<GetRestaurantRes> getRestaurants() throws BaseException {
+    public List<GetRestaurantsRes> getRestaurants() throws BaseException {
         try {
-            List<GetRestaurantRes> getRestaurantRes = restaurantsDao.getRestaurants();
-            return getRestaurantRes;
+            List<GetRestaurantsRes> getRestaurantsRes = restaurantsDao.getRestaurants();
+            return getRestaurantsRes;
         } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
         }
     }
 
-//        public List<GetRestaurantRes> getRestaurantByRestaurantName(int restaurantId) throws BaseException{
-//            try{
-//                List<GetRestaurantRes> getRestaurantRes = restaurantsDao.getRestaurantByRestaurantName(restaurantId);
-//                return getRestaurantRes;
-//            }
-//            catch (Exception exception) {
-//                throw new BaseException(DATABASE_ERROR);
-//            }
-//        }
+        public GetRestaurantRes getRestaurant(int id) throws BaseException{
+            try{
+                GetRestaurantRes getRestaurantRes = restaurantsDao.getRestaurant(id);
+                return getRestaurantRes;
+            }
+            catch (Exception exception) {
+                throw new BaseException(DATABASE_ERROR);
+            }
+        }
 
-//    public GetRestaurantRes getRestaurant(int id) throws BaseException {
-//        try {
-//            GetRestaurantRes getRestaurantRes = restaurantsDao.getRestaurant(id);
-//            return getRestaurantRes;
-//        } catch (Exception exception) {
-//            throw new BaseException(DATABASE_ERROR);
-//        }
-//    }
+
+    public GetRestaurantMenuRes getRestaurantMenu(int restaurantId) throws BaseException {
+        try {
+            System.out.println("2");
+            GetRestaurantMenuRes getRestaurantMenuRes = restaurantsDao.getRestaurantMenu(restaurantId);
+            return getRestaurantMenuRes;
+        } catch (Exception exception) {
+            System.out.println("20");
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+
 }

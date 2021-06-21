@@ -2,6 +2,8 @@ package com.example.demo.src.restaurants;
 
 import com.example.demo.config.BaseException;
 import com.example.demo.config.secret.Secret;
+import com.example.demo.src.restaurants.model.PatchRestaurantReq;
+import com.example.demo.src.user.model.PatchUserReq;
 import com.example.demo.src.user.model.PostUserReq;
 import com.example.demo.src.user.model.PostUserRes;
 import com.example.demo.utils.AES128;
@@ -26,6 +28,17 @@ public class RestaurantsService {
         this.restaurantsDao = restaurantsDao;
         this.restaurantsProvider = restaurantsProvider;
         this.jwtService = jwtService;
+    }
+
+    public void patchRestaurantLike(PatchRestaurantReq patchRestaurantReq) throws BaseException {
+        try{
+            int result = restaurantsDao.patchRestaurantLike(patchRestaurantReq);
+            if(result == 0){
+                throw new BaseException(MODIFY_FAIL_USERNAME);
+            }
+        } catch(Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
     }
 
 }

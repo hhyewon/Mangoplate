@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Column;
 import javax.persistence.Table;
 
 @Getter
@@ -12,18 +11,16 @@ import javax.persistence.Table;
 @AllArgsConstructor
 //@NoArgsConstructor
 @Table(name = "Restaurant")
-public class GetRestaurantRes {
+public class GetRestaurantInfoRes {
 
 //    @Column(name="id")
     private int id;
     private String restaurantName;
     private String firstUrl;
     private String restaurantLocation;
+    private float distance;
     private int totalViews;
     private int totalReviews;
     private float rating;
     private int isLike;
-    private int isVisited;
-
-
 }

@@ -37,9 +37,13 @@ public enum BaseResponseStatus {
     POST_REVIEWS_EMPTY_SCORE(false, 2019, "score에 평점을 입력해주세요."),
     POST_REVIEWS_INVALID_COMMENT(false, 2020, "comment는 10000자 이하로 입력해주세요."),
     POST_REVIEWS_INVALID_SCORE(false, 2021, "score에 1과 3사이의 점수를 입력해주세요."),
-    POST_REVIEWS_INVALID_RESTAURANTID(false, 2022, "restaurantId에 정수를 입력해주세요."),
+    POST_REVIEWS_INVALID_RESTAURANTID(false, 2022, "Id에 정수를 입력해주세요."),
     POST_REVIEWS_INVALID_REVIEWURL(false, 2023, "reviewUrl에 url형식으로 입력해주세요."),
 
+
+    // [GET] /restaurants/:restaurnatId
+    POST_REVIEWS_EMPTY_RESTAURANTID(false, 2024, "식당 ID를 입력해주세요 "),
+    POST_REVIEWS_INVALID_RESTAURANTID_RANGE(false, 2025, "값이 존재하지 않습니다. 식당 ID에 1부터 4까지의 숫자로 입력해주세요."),
 
     /**
      * 3000 : Response 오류

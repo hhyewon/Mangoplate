@@ -10,5 +10,11 @@ public class ValidationRegex {
         Matcher matcher = pattern.matcher(target);
         return matcher.find();
     }
+//        public static boolean isRegexId(String target) {
+//            String regex = "/^-?[1-9]*$/,";
+//            Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
+//            Matcher matcher = pattern.matcher(target);
+//            return matcher.find();
+//        }
 }
 

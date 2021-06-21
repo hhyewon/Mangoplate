@@ -2,10 +2,10 @@
 <project version="4">
   <component name="WebServers">
     <option name="servers">
-      <webServer id="eb754ce4-ef53-402c-8a32-dd41fac4a414" name="rp" url="www.hiimhyewon.site">
+      <webServer id="7e22522a-4aec-4821-a1d6-7e8cd3c22007" name="rp2" url="https://www.hiimhyewon.site">
         <fileTransfer rootFolder="/var/www/bn-mangoplate" accessType="SFTP" host="3.35.141.16" port="22" sshConfigId="18ac59c5-27a6-4d49-8f2c-5da449a420f8" sshConfig="ubuntu@3.35.141.16:22 key" keyPair="true">
           <advancedOptions>
-            <advancedOptions dataProtectionLevel="Private" keepAliveTimeout="0" muteSftpMessages="true" passiveMode="true" shareSSLContext="true" />
+            <advancedOptions dataProtectionLevel="Private" keepAliveTimeout="0" passiveMode="true" shareSSLContext="true" />
           </advancedOptions>
         </fileTransfer>
       </webServer>

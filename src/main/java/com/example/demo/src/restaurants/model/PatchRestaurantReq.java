@@ -11,7 +11,7 @@ import javax.persistence.Table;
 @Setter
 @AllArgsConstructor
 @Table(name = " RestaurantLike")
-public class PatchRestaurantRes {
+public class PatchRestaurantReq {
 
     private int userId;
     private int restaurantId;
