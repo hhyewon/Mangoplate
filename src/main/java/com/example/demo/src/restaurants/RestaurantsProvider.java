@@ -2,10 +2,7 @@ package com.example.demo.src.restaurants;
 
 
 import com.example.demo.config.BaseException;
-import com.example.demo.src.restaurants.model.GetRestaurantInfoRes;
-import com.example.demo.src.restaurants.model.GetRestaurantMenuRes;
-import com.example.demo.src.restaurants.model.GetRestaurantRes;
-import com.example.demo.src.restaurants.model.GetRestaurantsRes;
+import com.example.demo.src.restaurants.model.*;
 import com.example.demo.utils.JwtService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,13 +51,13 @@ public class RestaurantsProvider {
         }
 
 
-    public GetRestaurantMenuRes getRestaurantMenu(int restaurantId) throws BaseException {
+    public List<GetRestaurantMenuRes> getRestaurantMenu(int restaurantId) throws BaseException {
         try {
             System.out.println("2");
-            GetRestaurantMenuRes getRestaurantMenuRes = restaurantsDao.getRestaurantMenu(restaurantId);
+            List<GetRestaurantMenuRes> getRestaurantMenuRes = restaurantsDao.getRestaurantMenu(restaurantId);
             return getRestaurantMenuRes;
         } catch (Exception exception) {
-            System.out.println("20");
+            System.out.println(exception);
             throw new BaseException(DATABASE_ERROR);
         }
     }
@@ -71,6 +68,15 @@ public class RestaurantsProvider {
             return getRestaurantInfoRes;
         }
         catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    public List<GetRestaurantVisitedRes> getRestaurantVisited() throws BaseException {
+        try {
+            List<GetRestaurantVisitedRes> getRestaurantVisitedRes = restaurantsDao.getRestaurantVisited();
+            return getRestaurantVisitedRes;
+        } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
         }
     }

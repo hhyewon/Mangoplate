@@ -13,9 +13,12 @@ import javax.persistence.Table;
 @Table(name = " RestaurantLike")
 public class PatchRestaurantRes {
 
+    private String status;
     private int userId;
     private int restaurantId;
-    private String status;
+
+
+
 
 
 }

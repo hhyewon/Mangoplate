@@ -15,14 +15,15 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Table(name = "Review")
 public class Reviews {
-//    private int id;
-    private int id;
+   private int id;
+    private int reviewId;
     private int userId;
     private int restaurantId;
 //    private String userName;
     private String comment;
    private String reviewUrl;
-    private String score;
+    private float score;
+    private String status;
 //    private int userId;
 //    @DateTimeFormat(pattern = "yyyy-MM")
 //    @JsonFormat( pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")

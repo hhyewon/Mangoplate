@@ -20,9 +20,9 @@ import java.util.Date;
 public class GetRestaurantMenuRes {
 
     private int restaurantId;
+    private String updatedAt;
     private String menuName;
     private int price;
-    private String nickname;
 
 
 }

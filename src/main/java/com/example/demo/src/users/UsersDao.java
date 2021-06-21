@@ -2,6 +2,8 @@ package com.example.demo.src.users;
 
 
 
+import com.example.demo.src.users.model.GetFollowerRes;
+import com.example.demo.src.users.model.GetRestaurantLikeRes;
 import com.example.demo.src.users.model.GetUserRes;
 import com.example.demo.src.users.model.PostUserReq;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -80,6 +82,55 @@ public class UsersDao {
 
     }
 
+    public List<GetRestaurantLikeRes> getRestaurantLike(int userId){
+        String getRestaurantLikQuery = "select Restaurant.userId,\n" +
+                "       reviewUrl                 ,\n" +
+                "       substring(restaurantLocation, 7, 3)  as restaurantLocation,\n" +
+                "       restaurantName            ,\n" +
+                "       ifnull(views,0)                     as views,\n" +
+                "       ifnull(reviewCount, 0)    as reviews,\n" +
+                "       ifnull(IsLike.isLike, 0)  as isLike\n" +
+                "from Restaurant\n" +
+                "         left outer join (select Review.id, reviewUrl\n" +
+                "                          from Review\n" +
+                "                                   inner join ReviewImage on Review.id = ReviewImage.reviewId) MainImage\n" +
+                "                         on MainImage.id = Restaurant.id\n" +
+                "         left outer join (select Review.restaurantId, count(*) as reviewCount\n" +
+                "                          from Review) ReviewCount\n" +
+                "                         on ReviewCount.restaurantId = Restaurant.id\n" +
+                "\n" +
+                "         left outer join (select RestaurantLike.restaurantId, RestaurantLike.userId, count(*) as isLike\n" +
+                "                          from RestaurantLike\n" +
+                "                          where userId = ?\n" +
+                "                          group by restaurantId) IsLike\n" +
+                "                         on Restaurant.id = IsLike.restaurantId\n" +
+                "         left outer join (select ReviewScore.reviewId, AVG(score) as rating\n" +
+                "                          from ReviewScore\n" +
+                "                          group by ReviewScore.id) Score\n" +
+                "                         on Restaurant.id = Score.reviewId\n" +
+                "where IsLike=1 \n";
+        int getRestaurantLikeParams = userId;
+        return this.jdbcTemplate.query(getRestaurantLikQuery,
+                (rs, rowNum) -> new GetRestaurantLikeRes(
+                        rs.getInt("userId"),
+                        rs.getString("reviewUrl"),
+                        rs.getString("restaurantLocation"),
+                        rs.getString("restaurantName"),
+                        rs.getInt("views"),
+                        rs.getInt("reviews"),
+                        rs.getInt("isLike")),
+                getRestaurantLikeParams);
+    }
+
+    public List<GetFollowerRes> getfollower(int userId){
+        String getFolloewerQuery = "select followId from Follow where userId=? order by followId asc ";
+        int getFolloewerParams = userId;
+        return this.jdbcTemplate.query(getFolloewerQuery,
+                (rs, rowNum) -> new GetFollowerRes(
+                        rs.getInt("followId")
+                ),
+                getFolloewerParams);
+    }
 //    public int modifyUserName(PatchUserReq patchUserReq){
 //        String modifyUserNameQuery = "update UserInfo set userName = ? where userIdx = ? ";
 //        Object[] modifyUserNameParams = new Object[]{patchUserReq.getUserName(), patchUserReq.getUserIdx()};

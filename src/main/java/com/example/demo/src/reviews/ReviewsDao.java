@@ -2,9 +2,8 @@ package com.example.demo.src.reviews;
 
 
 import com.example.demo.src.restaurants.model.GetRestaurantsRes;
-import com.example.demo.src.reviews.model.GetReviewRes;
-import com.example.demo.src.reviews.model.PatchReviewReq;
-import com.example.demo.src.reviews.model.PostReviewReq;
+import com.example.demo.src.restaurants.model.PostRestaurantReq;
+import com.example.demo.src.reviews.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -22,7 +21,7 @@ public class ReviewsDao {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
-    public List<GetReviewRes> getReviews(){
+    public List<GetReviewRes> getReviews() {
         String getReviewsQuery = "select Review.restaurantId,\n" +
                 "       userUrl             ,\n" +
                 "       nickname             ,\n" +
@@ -64,7 +63,7 @@ public class ReviewsDao {
                 "                         on ReviewCount.userId = User.id\n" +
                 "group by Review.userId";
         return this.jdbcTemplate.query(getReviewsQuery,
-                (rs,rowNum) -> new GetReviewRes(
+                (rs, rowNum) -> new GetReviewRes(
                         rs.getInt("restaurantId"),
                         rs.getString("userUrl"),
                         rs.getString("nickname"),
@@ -82,38 +81,56 @@ public class ReviewsDao {
                         rs.getInt("replytotal")
 
 
-                        )
+                )
         );
+    }
+
+   public int createReview(PostReviewReq postReviewReq){
+        System.out.println("1");
+        String createReviewQuery = "insert into Review (userId,restaurantId,comment) VALUES (?,?,?)";
+        System.out.println("2");
+        Object[] createReviewParams = new Object[]{postReviewReq.getUserId(), postReviewReq.getRestaurantId(), postReviewReq.getComment()};
+        System.out.println("3");
+        this.jdbcTemplate.update(createReviewQuery, createReviewParams);
+        System.out.println("4");
+
+        String lastInserIdQuery = "select last_insert_id()";
+
+        return this.jdbcTemplate.queryForObject(lastInserIdQuery,int.class);
+
+    }
 
 
-//   public int createReview(PostReviewReq postReviewReq){
-//
-//        System.out.println("1");
-//        String createReviewQuery = "insert into Review (userId,restaurantId,reviewUrl,comment,score) VALUES (?,?,?,?,?)";
-//        System.out.println("2");
-//        Object[] createReviewParams = new Object[]{postReviewReq.getUserId(), postReviewReq.getRestaurantId(), postReviewReq.getReviewUrl(), postReviewReq.getComment(), postReviewReq.getScore()};
-//        System.out.println("3");
-//        this.jdbcTemplate.update(createReviewQuery, createReviewParams);
-//        System.out.println("4");
-//
-//        String lastInserIdQuery = "select last_insert_id()";
-//
-//        return this.jdbcTemplate.queryForObject(lastInserIdQuery,int.class);
-//
-//    }
-//
-//
-//    public int modifyReview(PatchReviewReq patchReviewReq){
-//        String modifyReviewQuery = "update ReviewScore as ReviewScore,\n" +
-//                "         ReviewImage as ReviewImage,\n" +
-//                "    Review as Review\n" +
-//                "set\n" +
-//                "   ReviewScore.score    = ?,\n" +
-//                "    ReviewImage.reviewUrl=?,\n" +
-//                "    Review.comment=?\n" +
-//                "where  Review.id =ReviewImage.reviewId and Review.id=ReviewScore.reviewID and Review.id=?;";
-//        Object[] modifyReviewParams = new Object[]{patchReviewReq.getId(), patchReviewReq.getReviewUrl(), patchReviewReq.getComment(),patchReviewReq.getScore()};
-//
-//        return this.jdbcTemplate.update(modifyReviewQuery,modifyReviewParams);
+    public int modifyReview(PatchReviewReq patchReviewReq){
+        String modifyReviewQuery = "update Review \n" +
+                "left outer join ReviewImage on ReviewImage.reviewId = Review.id\n" +
+                "left outer join ReviewScore on ReviewScore.reviewId = Review.id\n" +
+                "set ReviewScore.score    = ?,\n" +
+                "    ReviewImage.reviewUrl=?,\n" +
+                "    Review.comment=?\n" +
+                "where Review.id =?;";
+        Object[] modifyReviewParams = new Object[]{ patchReviewReq.getScore(),   patchReviewReq.getReviewUrl(),patchReviewReq.getComment(),patchReviewReq.getId() };
+
+        return this.jdbcTemplate.update(modifyReviewQuery,modifyReviewParams);
+
+    }
+
+    public int createReply(PostReplyReq postReplyReq){
+        System.out.println("3");
+        String createReplyQuery = "insert into ReviewReply (reviewId, reply) VALUES (?,?)";
+        Object[] createReplyParams = new Object[]{postReplyReq.getReviewId(),postReplyReq.getReply()};
+        this.jdbcTemplate.update(createReplyQuery, createReplyParams);
+        System.out.println("4");
+        String lastInserIdQuery = "select last_insert_id()";
+        return this.jdbcTemplate.queryForObject(lastInserIdQuery,int.class);
+    }
+
+    public int modifyReviewDel(PatchReviewDelReq patchReviewDelReq){
+        String modifyReviewDelQuery = "update Review set status=? where Review.id =?";
+        Object[] modifyReviewDelParams = new Object[]{ patchReviewDelReq.getStatus(),patchReviewDelReq.getId() };
+
+        return this.jdbcTemplate.update(modifyReviewDelQuery,modifyReviewDelParams);
+
+    }
 }
-}
+

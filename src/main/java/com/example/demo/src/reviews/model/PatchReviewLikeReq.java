@@ -10,7 +10,7 @@ import javax.persistence.Table;
 @Setter
 @AllArgsConstructor
 @Table(name = "Review")
-public class PatchReviewReq {
+public class PatchReviewLikeReq {
 
 
     private float score;

@@ -1,4 +1,4 @@
-package com.example.demo.src.restaurants.model;
+package com.example.demo.src.reviews.model;
 
 
 import lombok.AllArgsConstructor;
@@ -10,14 +10,10 @@ import javax.persistence.Table;
 @Getter
 @Setter
 @AllArgsConstructor
-@Table(name = " RestaurantLike")
-public class PatchRestaurantReq {
-
-
+@Table(name = "Review")
+public class PatchReviewDelRes {
 
 
     private String status;
-    private int userId;
-    private int restaurantId;
-
+    private int id;
 }

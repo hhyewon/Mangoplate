@@ -2,9 +2,8 @@ package com.example.demo.src.restaurants;
 
 import com.example.demo.config.BaseException;
 import com.example.demo.config.secret.Secret;
-import com.example.demo.src.restaurants.model.PatchRestaurantReq;
-import com.example.demo.src.restaurants.model.PostRestaurantReq;
-import com.example.demo.src.restaurants.model.PostRestaurantRes;
+import com.example.demo.src.restaurants.model.*;
+import com.example.demo.src.user.model.PostUserRes;
 import com.example.demo.utils.AES128;
 import com.example.demo.utils.JwtService;
 import org.slf4j.Logger;
@@ -31,6 +30,7 @@ public class RestaurantsService {
 
     public void patchRestaurantLike(PatchRestaurantReq patchRestaurantReq) throws BaseException {
         try{
+
             int result = restaurantsDao.patchRestaurantLike(patchRestaurantReq);
             if(result == 0){
                 throw new BaseException(MODIFY_FAIL_USERNAME);
@@ -48,6 +48,18 @@ public class RestaurantsService {
             System.out.println("2");
             int id = restaurantsDao.createRestaurant(postRestaurantReq);
             return new PostRestaurantRes(id);
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    //POST
+    public PostRestaurantVisitedRes createRestaurantVisited(int restaurantId, int userId) throws BaseException {
+
+        try{
+            System.out.println("2");
+            int id = restaurantsDao.createRestaurantVisited(restaurantId, userId);
+            return new PostRestaurantVisitedRes(id);
         } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
         }

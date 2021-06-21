@@ -16,8 +16,7 @@ public class PostReviewReq {
 //    private int id;
     private int userId;
     private int restaurantId;
-    private String reviewUrl;
     private String comment;
-    private String score;
+
 
 }

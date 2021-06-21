@@ -30,28 +30,4 @@ public class EatdealService {
         this.jwtService = jwtService;
     }
 
-    public void patchRestaurantLike(PatchRestaurantReq patchRestaurantReq) throws BaseException {
-        try{
-            int result = restaurantsDao.patchRestaurantLike(patchRestaurantReq);
-            if(result == 0){
-                throw new BaseException(MODIFY_FAIL_USERNAME);
-            }
-        } catch(Exception exception){
-            System.out.println(exception);
-            throw new BaseException(DATABASE_ERROR);
-        }
-    }
-
-    //POST
-    public PostRestaurantRes createRestaurant(PostRestaurantReq postRestaurantReq) throws BaseException {
-
-        try{
-            System.out.println("2");
-            int id = restaurantsDao.createRestaurant(postRestaurantReq);
-            return new PostRestaurantRes(id);
-        } catch (Exception exception) {
-            throw new BaseException(DATABASE_ERROR);
-        }
-    }
-
 }

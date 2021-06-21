@@ -2,6 +2,8 @@ package com.example.demo.src.users;
 
 
 import com.example.demo.config.BaseException;
+import com.example.demo.src.users.model.GetFollowerRes;
+import com.example.demo.src.users.model.GetRestaurantLikeRes;
 import com.example.demo.src.users.model.GetUserRes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,6 +53,30 @@ public class UsersProvider {
             return usersDao.checkEmail(email);
         } catch (Exception exception){
             System.out.println("50");
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+
+    public List<GetRestaurantLikeRes> getRestaurantLike(int userId) throws BaseException {
+        try {
+            System.out.println("4");
+            List<GetRestaurantLikeRes> getRestaurantLikeRes = usersDao.getRestaurantLike(userId);
+            return getRestaurantLikeRes;
+        } catch (Exception exception) {
+            System.out.println(exception);
+            System.out.println("40");
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    public List<GetFollowerRes> getfollower(int userId) throws BaseException{
+        try{
+            List<GetFollowerRes> getFollowerRes = usersDao.getfollower(userId);
+            return getFollowerRes;
+        }
+        catch (Exception exception) {
+            System.out.println(exception);
             throw new BaseException(DATABASE_ERROR);
         }
     }

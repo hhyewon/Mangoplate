@@ -51,6 +51,23 @@ public enum BaseResponseStatus {
     POST_REVIEWS_EMPTY_RESTAURANTID(false, 2060, "식당 ID를 입력해주세요 "),
     POST_REVIEWS_INVALID_RESTAURANTID_RANGE(false, 2061, "값이 존재하지 않습니다. 식당 ID에 1부터 4까지의 숫자로 입력해주세요."),
 
+
+
+    INVALID_STATUS(false, 2300,"Status 값을 ACTIVATE 혹은 INACTIVATE로 입력해주세요"),
+    PATCH_EMPTY_STATUS(false, 2301,"Status 값을 입력해주세요"),
+
+    //POST// Rest
+    POST_RESTAURANTS_EMPTY_USERID(false, 2400,"유저 ID 값을 입력해주세요"),
+    POST_RESTAURANTS_EMPTY_RESTAURANTID(false, 2401,"식당 ID 값을 입력해주세요"),
+    POST_RESTAURANTS_EMPTY(false, 2301,"Status 값을 입력해주세요"),
+
+    //GET //REST
+
+
+
+    // [POST]
+
+
     /**
      * 3000 : Response 오류
      */
@@ -63,6 +80,7 @@ public enum BaseResponseStatus {
 
     // [GET] /restaurants
     RESTAURNATS_RESPONSE_ERROR(false, 3000, "식당 조회를 실패하셨습니다."),
+
 
 
 

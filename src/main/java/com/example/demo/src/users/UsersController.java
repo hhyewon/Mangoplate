@@ -2,9 +2,7 @@ package com.example.demo.src.users;
 
 import com.example.demo.config.BaseException;
 import com.example.demo.config.BaseResponse;
-import com.example.demo.src.users.model.GetUserRes;
-import com.example.demo.src.users.model.PostUserReq;
-import com.example.demo.src.users.model.PostUserRes;
+import com.example.demo.src.users.model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +42,6 @@ public class UsersController {
     @GetMapping("") // (GET) 127.0.0.1:9000/app/users
     public BaseResponse<List<GetUserRes>> getUsers() {
         try {
-
             List<GetUserRes> getUserRes = usersProvider.getUsers();
             return new BaseResponse<>(getUserRes);
         } catch (BaseException exception) {
@@ -64,6 +61,9 @@ public class UsersController {
     public BaseResponse<GetUserRes> getUser(@PathVariable("userid") int id) {
         // Get Users
         try {
+            if( id == 0 ){
+                return new BaseResponse<>(USERS_EMPTY_USER_ID);
+            }
             GetUserRes getUserRes = usersProvider.getUser(id);
             return new BaseResponse<>(getUserRes);
         } catch (BaseException exception) {
@@ -106,6 +106,42 @@ public class UsersController {
             return new BaseResponse<>((exception.getStatus()));
         }
     }
+
+
+    @ResponseBody
+    @GetMapping("/{userid}/likelist") // (GET) 127.0.0.1:9000/app/users/:userIdx
+    public BaseResponse<List<GetRestaurantLikeRes>> getRestaurantLike(@PathVariable("userid") int userId) {
+        // Get Users
+        try {
+            if(userId == 0){
+                return new BaseResponse<>(POST_REVIEWS_EMPTY_USERID);
+            }
+            System.out.println("1");
+//            GetRestaurantLikeRes getRestaurantLikeRes = usersProvider.getRestaurantLike(userId);
+            List<GetRestaurantLikeRes> getRestaurantLikeRes = usersProvider.getRestaurantLike(userId);
+            return new BaseResponse<>(getRestaurantLikeRes);
+
+//            return new BaseResponse<>(getRestaurantLikeRes);
+        } catch (BaseException exception) {
+            System.out.println(exception);
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
+    //팔로워 보기
+    @ResponseBody
+    @GetMapping("/{userid}/follower") // (GET) 127.0.0.1:9000/app/users
+    public BaseResponse<List<GetFollowerRes>> getfollower(@PathVariable("userid") int userId) {
+        try {
+            List<GetFollowerRes> getFollowerRes = usersProvider.getfollower(userId);
+            return new BaseResponse<>(getFollowerRes);
+        } catch (BaseException exception) {
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
+
+
 //    /**
 //     * 로그인 API
 //     * [POST] /users/logIn
