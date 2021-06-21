@@ -3,7 +3,6 @@ package com.example.demo.src.restaurants;
 import com.example.demo.config.BaseException;
 import com.example.demo.config.BaseResponse;
 import com.example.demo.src.restaurants.model.*;
-import com.example.demo.src.user.model.PatchUserReq;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 import static com.example.demo.config.BaseResponseStatus.*;
+import static com.example.demo.utils.ValidationRegex.isRegexEmail;
 
 @RestController
 @RequestMapping("/restaurants")
@@ -32,9 +32,6 @@ public class RestaurantsController {
     /**
      * 식당 조회 API
      * [GET] /restaurants
-     * 회원 번호 및 이메일 검색 조회 API
-     * [GET] /restaurants? RestaurantId=
-     * @return BaseResponse<List<GetUserRes>>
      */
 
     @GetMapping("") // (GET) 127.0.0.1:9000/restaurants
@@ -94,7 +91,7 @@ public class RestaurantsController {
             GetRestaurantMenuRes getRestaurantMenuRes = restaurantsProvider.getRestaurantMenu(restaurantId);
             return new BaseResponse<>(getRestaurantMenuRes);
         } catch(BaseException exception){
-            System.out.println("10");
+            System.out.println(exception);
             return new BaseResponse<>((exception.getStatus()));
         }
     }
@@ -145,6 +142,38 @@ public class RestaurantsController {
             String result = "";
             return new BaseResponse<>(result);
         } catch (BaseException exception) {
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
+
+    /**
+     * 식당 등록하기 API
+     * [POST] /restaurants
+     * @return BaseResponse<PostUserRes>
+     */
+    // Body
+    @ResponseBody
+    @PostMapping("")
+    public BaseResponse<PostRestaurantRes> createRestaurant(@RequestBody PostRestaurantReq postRestaurantReq) {
+        try{
+            if(postRestaurantReq.getRestaurantName() == null){
+                return new BaseResponse<>(POST_REVIEWS_EMPTY_RST_NAME);
+            }
+            if(postRestaurantReq.getRestaurantLocation() == null){
+                return new BaseResponse<>(POST_REVIEWS_EMPTY_RST_LOCATION);
+            }
+            if(postRestaurantReq.getVariety() == null){
+                return new BaseResponse<>(POST_REVIEWS_EMPTY_RST_VARIETY);
+            }
+            if(postRestaurantReq.getUserId() == 0){
+                return new BaseResponse<>(POST_REVIEWS_EMPTY_USERID);
+            }
+
+            System.out.println("1");
+            PostRestaurantRes postRestaurantRes = restaurantsService.createRestaurant(postRestaurantReq);
+            return new BaseResponse<>(postRestaurantRes);
+        } catch(BaseException exception){
             return new BaseResponse<>((exception.getStatus()));
         }
     }

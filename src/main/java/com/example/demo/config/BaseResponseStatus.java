@@ -27,23 +27,29 @@ public enum BaseResponseStatus {
     USERS_EMPTY_USER_ID(false, 2010, "유저 아이디 값을 확인해주세요."),
 
     // [POST] /users
-    POST_USERS_EMPTY_EMAIL(false, 2015, "이메일을 입력해주세요."),
-    POST_USERS_INVALID_EMAIL(false, 2016, "이메일 형식을 확인해주세요."),
-    POST_USERS_EXISTS_EMAIL(false,2017,"중복된 이메일입니다."),
-
-
+    POST_USERS_EMPTY_EMAIL(false, 2020, "이메일을 입력해주세요."),
+    POST_USERS_INVALID_EMAIL(false, 2021, "이메일 형식을 확인해주세요."),
+    POST_USERS_EXISTS_EMAIL(false,2022,"중복된 이메일입니다."),
+    POST_USERS_EMPTY_NICKNAME(false, 2023, "닉네입을 입력해주세요."),
+    POST_USERS_EMPTY_PASSWORD(false, 2024, "비밀번호를 입력해주세요."),
+    POST_USERS_EMPTY_PHONENUMBER(false, 2025, "전화번호를 입력해주세요."),
+    POST_USERS_INVALID_PASSWORD(false, 2026, "비밀번호가 짧습니다. 5자 이상으로 입력해주세요"),
     // [POST] /reviews
-    POST_REVIEWS_EMPTY_COMMENT(false, 2018, "comment에 내용을 입력해주세요."),
-    POST_REVIEWS_EMPTY_SCORE(false, 2019, "score에 평점을 입력해주세요."),
-    POST_REVIEWS_INVALID_COMMENT(false, 2020, "comment는 10000자 이하로 입력해주세요."),
-    POST_REVIEWS_INVALID_SCORE(false, 2021, "score에 1과 3사이의 점수를 입력해주세요."),
-    POST_REVIEWS_INVALID_RESTAURANTID(false, 2022, "Id에 정수를 입력해주세요."),
-    POST_REVIEWS_INVALID_REVIEWURL(false, 2023, "reviewUrl에 url형식으로 입력해주세요."),
+    POST_REVIEWS_EMPTY_COMMENT(false, 2040, "comment에 내용을 입력해주세요."),
+    POST_REVIEWS_EMPTY_SCORE(false, 2041, "score에 평점을 입력해주세요."),
+    POST_REVIEWS_INVALID_COMMENT(false, 2042, "comment는 10000자 이하로 입력해주세요."),
+    POST_REVIEWS_INVALID_SCORE(false, 2043, "score에 1과 3사이의 점수를 입력해주세요."),
+    POST_REVIEWS_INVALID_RESTAURANTID(false, 2044, "Id에 정수를 입력해주세요."),
+    POST_REVIEWS_INVALID_REVIEWURL(false, 2045, "reviewUrl에 url형식으로 입력해주세요."),
+    POST_REVIEWS_EMPTY_RST_NAME(false, 2046, "식당이름을 입력해주세요."),
+    POST_REVIEWS_EMPTY_RST_LOCATION(false, 2047, "식당 위치를 입력해주세요."),
+    POST_REVIEWS_EMPTY_RST_VARIETY(false, 2048, "식당 종류를 입력해주세요."),
+    POST_REVIEWS_EMPTY_USERID(false, 2049, "유저 아이디를 입력해주세요."),
 
 
     // [GET] /restaurants/:restaurnatId
-    POST_REVIEWS_EMPTY_RESTAURANTID(false, 2024, "식당 ID를 입력해주세요 "),
-    POST_REVIEWS_INVALID_RESTAURANTID_RANGE(false, 2025, "값이 존재하지 않습니다. 식당 ID에 1부터 4까지의 숫자로 입력해주세요."),
+    POST_REVIEWS_EMPTY_RESTAURANTID(false, 2060, "식당 ID를 입력해주세요 "),
+    POST_REVIEWS_INVALID_RESTAURANTID_RANGE(false, 2061, "값이 존재하지 않습니다. 식당 ID에 1부터 4까지의 숫자로 입력해주세요."),
 
     /**
      * 3000 : Response 오류

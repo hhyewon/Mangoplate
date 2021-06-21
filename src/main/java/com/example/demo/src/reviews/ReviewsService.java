@@ -7,9 +7,6 @@ import com.example.demo.config.secret.Secret;
 import com.example.demo.src.reviews.model.PatchReviewReq;
 import com.example.demo.src.reviews.model.PostReviewReq;
 import com.example.demo.src.reviews.model.PostReviewRes;
-import com.example.demo.src.user.model.PatchUserReq;
-import com.example.demo.src.user.model.PostUserReq;
-import com.example.demo.src.user.model.PostUserRes;
 import com.example.demo.utils.AES128;
 import com.example.demo.utils.JwtService;
 import org.slf4j.Logger;
@@ -37,31 +34,31 @@ public class ReviewsService {
     }
 
 
-    //POST
-    public PostReviewRes createReview(PostReviewReq postReviewReq) throws BaseException {
-    try {
-
-        return new PostReviewRes(reviewsDao.createReview(postReviewReq));
-
-//        return new PostReviewRes(reviewsDao.createReview(postReviewReq));
-    }catch (Exception exception){
-        System.out.println(exception);
-        throw new BaseException(DATABASE_ERROR);
-    }
-    }
+//    //POST
+//    public PostReviewRes createReview(PostReviewReq postReviewReq) throws BaseException {
+//    try {
+//        int id = reviewsDao.createReview(postReviewReq);
+//        return new PostReviewRes(id);
+//
+////        return new PostReviewRes(reviewsDao.createReview(postReviewReq));
+//    }catch (Exception exception){
+//        System.out.println(exception);
+//        throw new BaseException(DATABASE_ERROR);
+//    }
+//    }
 
     //Patch
-    public void modifyReview(PatchReviewReq patchReviewReq) throws BaseException {
-        try{
-            int result = reviewsDao.modifyReview(patchReviewReq);
-            if(result == 0){
-                throw new BaseException(MODIFY_FAIL_EMPTY);
-            }
-
-        } catch(Exception exception){
-            System.out.println(exception);
-            throw new BaseException(DATABASE_ERROR);
-        }
-    }
+//    public void modifyReview(PatchReviewReq patchReviewReq) throws BaseException {
+//        try{
+//            int result = reviewsDao.modifyReview(patchReviewReq);
+//            if(result == 0){
+//                throw new BaseException(MODIFY_FAIL_EMPTY);
+//            }
+//
+//        } catch(Exception exception){
+//            System.out.println(exception);
+//            throw new BaseException(DATABASE_ERROR);
+//        }
+//    }
 
 }

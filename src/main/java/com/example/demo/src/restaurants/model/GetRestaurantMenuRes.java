@@ -22,7 +22,7 @@ public class GetRestaurantMenuRes {
     private int restaurantId;
     private String menuName;
     private int price;
-    private String nickName;
+    private String nickname;
 
 
 }

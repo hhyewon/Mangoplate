@@ -2,8 +2,6 @@ package com.example.demo.src.restaurants;
 
 import com.example.demo.config.BaseException;
 import com.example.demo.src.restaurants.model.*;
-import com.example.demo.src.user.model.GetUserRes;
-import com.example.demo.src.user.model.PatchUserReq;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -169,7 +167,7 @@ public class RestaurantsDao {
                 "     , offDays\n" +
                 "     , variety\n" +
                 "     , isParking\n" +
-                "     , Concat(nickName, '님의 소중한 발견으로 등록한 장소예요!') as writer\n" +
+                "     , Concat(nickname, '님의 소중한 발견으로 등록한 장소예요!') as writer\n" +
                 "from Restaurant\n" +
                 "         left outer join User on Restaurant.userId = User.id\n" +
                 "where Restaurant.id = ?";
@@ -197,4 +195,16 @@ public class RestaurantsDao {
 
         return this.jdbcTemplate.update(modifyRestaurantLikeQuery,modifyRestaurantLikeParams);
     }
+
+    public int createRestaurant(PostRestaurantReq postRestaurantReq){
+        System.out.println("3");
+        String createRestaurantQuery = "insert into Restaurant (restaurantName, restaurantLocation, restaurantNumber, variety, userId) VALUES (?,?,?,?,?)";
+        Object[] createRestaurantParams = new Object[]{postRestaurantReq.getRestaurantName(), postRestaurantReq.getRestaurantLocation(), postRestaurantReq.getRestaurantNumber(), postRestaurantReq.getVariety(),postRestaurantReq.getUserId()};
+        this.jdbcTemplate.update(createRestaurantQuery, createRestaurantParams);
+        System.out.println("4");
+        String lastInserIdQuery = "select last_insert_id()";
+        return this.jdbcTemplate.queryForObject(lastInserIdQuery,int.class);
+    }
+
+
 }
