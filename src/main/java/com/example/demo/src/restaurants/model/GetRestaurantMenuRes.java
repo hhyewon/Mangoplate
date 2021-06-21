@@ -20,9 +20,6 @@ import java.util.Date;
 public class GetRestaurantMenuRes {
 
     private int restaurantId;
-//    @DateTimeFormat(pattern = "yyyy-MM")
-//    @JsonFormat( pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
-//    private Date updatedAt;
     private String menuName;
     private int price;
     private String nickName;

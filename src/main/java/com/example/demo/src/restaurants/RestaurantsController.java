@@ -86,7 +86,7 @@ public class RestaurantsController {
      * 메뉴 더보기 API
      * [GET] /restaurants/:restaurantid/menu
      */
-
+    @ResponseBody
     @GetMapping("/{restaurantid}/menu") // (GET) 127.0.0.1:9000/restaurants
     public BaseResponse<GetRestaurantMenuRes> getRestaurantMenu(@PathVariable("restaurantid") int restaurantId) {
         try{
@@ -99,6 +99,33 @@ public class RestaurantsController {
         }
     }
 
+    /**
+     * 식당 정보 조회 API
+     * [GET] /restaurants/:restaurantId
+     * @return BaseResponse<GetUserRes>
+     */
+    //    Path-variable
+    @ResponseBody
+    @GetMapping("/{restaurantid}/info") // (GET) 127.0.0.1:9000/app/users/:userIdx
+    public BaseResponse<GetRestaurantInfoRes> getRestaurantInfo(@PathVariable("restaurantid") int id) {
+        // Get Users
+        try{
+            if (id == 0){
+                return new BaseResponse<>(POST_REVIEWS_EMPTY_RESTAURANTID);
+            }
+            if (id> 4 || id<1){
+                return new BaseResponse<>(POST_REVIEWS_INVALID_RESTAURANTID_RANGE);
+            }
+            GetRestaurantInfoRes getRestaurantInfoRes = restaurantsProvider.getRestaurantInfo(id);
+
+            return new BaseResponse<>(getRestaurantInfoRes);
+        } catch(BaseException exception){
+            return new BaseResponse<>((exception.getStatus()));
+        }
+
+    }
+
+
 
 
     /**
@@ -106,21 +133,21 @@ public class RestaurantsController {
      * [PATCH] /users/:userIdx
      * @return BaseResponse<String>
      */
-//    @ResponseBody
-//    @PatchMapping("/{/{restaurantid}/{userid}/like}")
-//    public BaseResponse<String> patchRestaurantLike(@PathVariable("restaurantid") int restaurantId, @PathVariable("userid") int userId, @RequestBody PatchRestaurantRes patchRestaurantRes){
-//        try {
-//
-//            //같다면 유저네임 변경
-//            PatchRestaurantReq patchRestaurantReq = new PatchRestaurantReq(restaurantId,userId, patchRestaurantRes.getStatus());
-//            restaurantsService.patchRestaurantLike(patchRestaurantReq);
-//
-//            String result = "";
-//            return new BaseResponse<>(result);
-//        } catch (BaseException exception) {
-//            return new BaseResponse<>((exception.getStatus()));
-//        }
-//    }
+    @ResponseBody
+    @PatchMapping("/{/{restaurantid}/{userid}/like}")
+    public BaseResponse<String> patchRestaurantLike(@PathVariable("restaurantid") int restaurantId, @PathVariable("userid") int userId, @RequestBody PatchRestaurantRes patchRestaurantRes){
+        try {
+
+            //같다면 유저네임 변경
+            PatchRestaurantReq patchRestaurantReq = new PatchRestaurantReq(restaurantId,userId, patchRestaurantRes.getStatus());
+            restaurantsService.patchRestaurantLike(patchRestaurantReq);
+
+            String result = "";
+            return new BaseResponse<>(result);
+        } catch (BaseException exception) {
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
 
 
 

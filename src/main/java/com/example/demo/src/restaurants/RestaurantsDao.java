@@ -1,10 +1,7 @@
 package com.example.demo.src.restaurants;
 
 import com.example.demo.config.BaseException;
-import com.example.demo.src.restaurants.model.GetRestaurantMenuRes;
-import com.example.demo.src.restaurants.model.GetRestaurantRes;
-import com.example.demo.src.restaurants.model.GetRestaurantsRes;
-import com.example.demo.src.restaurants.model.PatchRestaurantReq;
+import com.example.demo.src.restaurants.model.*;
 import com.example.demo.src.user.model.GetUserRes;
 import com.example.demo.src.user.model.PatchUserReq;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -161,6 +158,34 @@ public class RestaurantsDao {
                         rs.getInt("price"),
                         rs.getString("nickName")),
                 getRestaurantMenuParams);
+    }
+
+    public GetRestaurantInfoRes getRestaurantInfo(int id){
+        String getRestaurantInfoQuery = "" +
+                "select Restaurant.id" +
+                "     , concat('마지막 업데이트: ', date_format(Restaurant.updatedAt, '%Y-%m-%d')) as updatedAt\n" +
+                "     , CONCAT(openHour, ' ~ ', closeHour) as businessHours\n" +
+                "     , CONCAT(breakTimeStart, ' ~ ', breakTimeEnd) as breakTime\n" +
+                "     , offDays\n" +
+                "     , variety\n" +
+                "     , isParking\n" +
+                "     , Concat(nickName, '님의 소중한 발견으로 등록한 장소예요!') as writer\n" +
+                "from Restaurant\n" +
+                "         left outer join User on Restaurant.userId = User.id\n" +
+                "where Restaurant.id = ?";
+        int getRestaurantInfoParams = id;
+        return this.jdbcTemplate.queryForObject(getRestaurantInfoQuery,
+                (rs, rowNum) -> new GetRestaurantInfoRes(
+                        rs.getInt("id"),
+                        rs.getString("updatedAt"),
+                        rs.getString("businessHours"),
+                        rs.getString("breakTime"),
+                        rs.getString("offDays"),
+                        rs.getString("variety"),
+                        rs.getString("isParking"),
+                        rs.getString("writer")
+                        ),
+                getRestaurantInfoParams);
     }
 
 

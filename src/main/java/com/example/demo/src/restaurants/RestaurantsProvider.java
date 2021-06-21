@@ -2,6 +2,7 @@ package com.example.demo.src.restaurants;
 
 
 import com.example.demo.config.BaseException;
+import com.example.demo.src.restaurants.model.GetRestaurantInfoRes;
 import com.example.demo.src.restaurants.model.GetRestaurantMenuRes;
 import com.example.demo.src.restaurants.model.GetRestaurantRes;
 import com.example.demo.src.restaurants.model.GetRestaurantsRes;
@@ -60,6 +61,16 @@ public class RestaurantsProvider {
             return getRestaurantMenuRes;
         } catch (Exception exception) {
             System.out.println("20");
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    public GetRestaurantInfoRes getRestaurantInfo(int id) throws BaseException{
+        try{
+            GetRestaurantInfoRes getRestaurantInfoRes = restaurantsDao.getRestaurantInfo(id);
+            return getRestaurantInfoRes;
+        }
+        catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
         }
     }

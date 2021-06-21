@@ -15,12 +15,11 @@ public class GetRestaurantInfoRes {
 
 //    @Column(name="id")
     private int id;
-    private String restaurantName;
-    private String firstUrl;
-    private String restaurantLocation;
-    private float distance;
-    private int totalViews;
-    private int totalReviews;
-    private float rating;
-    private int isLike;
+    private String updatedAt;
+    private String businessHours;
+    private String breakTime;
+    private String offDays;
+    private String variety;
+    private String isParking;
+    private String writer;
 }
