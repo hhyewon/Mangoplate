@@ -13,9 +13,10 @@ import javax.persistence.Table;
 @Table(name="User")
 public class GetUserRes {
     private int id;
-    private String email;
-    private String password;
-    private String phoneNumber;
     private String userUrl;
     private String nickname;
+    private int totalFollowCount;
+    private int totalReviewCount;
+    private int totalVisited;
+    private int totalLike;
 }

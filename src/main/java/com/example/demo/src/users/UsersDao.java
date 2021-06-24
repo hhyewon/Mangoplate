@@ -2,31 +2,32 @@ package com.example.demo.src.users;
 
 
 
-import com.example.demo.src.users.model.GetFollowerRes;
-import com.example.demo.src.users.model.GetRestaurantLikeRes;
-import com.example.demo.src.users.model.GetUserRes;
-import com.example.demo.src.users.model.PostUserReq;
+import com.example.demo.src.users.model.*;
+import com.example.demo.utils.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import javax.sql.DataSource;
 import java.util.List;
 
 @Repository
 public class UsersDao {
 
     private JdbcTemplate jdbcTemplate;
+    private JwtService jwtService;
 
     @Autowired
-    public void setDataSource(DataSource dataSource){
-        this.jdbcTemplate = new JdbcTemplate(dataSource);
+    public UsersDao(JdbcTemplate jdbcTemplate, JwtService jwtService) {
+        this.jdbcTemplate = jdbcTemplate;
+        this.jwtService = jwtService;
     }
 
-    public List<GetUserRes> getUsers(){
+
+
+    public List<GetUsersRes> getUsers(){
         String getUsersQuery = "select * from User";
         return this.jdbcTemplate.query(getUsersQuery,
-                (rs,rowNum) -> new GetUserRes(
+                (rs,rowNum) -> new GetUsersRes(
                         rs.getInt("id"),
                         rs.getString("email"),
                         rs.getString("password"),
@@ -49,17 +50,46 @@ public class UsersDao {
 //                getUsersByEmailParams);
 //    }
 //
+    //특정 회원 조회
     public GetUserRes getUser(int id){
-        String getUserQuery = "select * from User where id = ?";
+        String getUserQuery = "select User.id,\n" +
+                "       userUrl,\n" +
+                "       nickname,\n" +
+                "       ifnull(totalFollowCount,0) as totalFollowCount,\n" +
+                "       ifnull(totalReviewCount,0) as totalReviewCount,\n" +
+                "       ifnull(totalVisited,0) as totalVisited,\n" +
+                "       ifnull(totalLike,0) as totalLike\n" +
+                "from User\n" +
+                "         left outer join (select RestaurantLike.userId, count(*) as totalLike\n" +
+                "                          from RestaurantLike\n" +
+                "#                           where userId = ?\n" +
+                "                          group by restaurantId) IsLike\n" +
+                "                         on User.id = IsLike.userId\n" +
+                "         left outer join (select RestaurantVisited.userId, count(*) as totalVisited\n" +
+                "                          from RestaurantVisited\n" +
+                "#                           where userId = ?\n" +
+                "                          group by restaurantId) IsVisited\n" +
+                "                         on User.id = IsVisited.userId\n" +
+                "         left outer join Follow on Follow.userId = User.id\n" +
+                "         left outer join (select Follow.id, count(*) as totalFollowCount\n" +
+                "                     from Follow) FollowCount\n" +
+                "                    on User.id = Follow.userId\n" +
+                "         left outer join (select Review.userId, count(*) as totalReviewCount\n" +
+                "                          from Review\n" +
+                "                          group by userId) Reviews\n" +
+                "                         on User.id = Reviews.userId\n" +
+                "where User.id=?\n" +
+                "group by User.id";
         int getUserParams = id;
         return this.jdbcTemplate.queryForObject(getUserQuery,
                 (rs, rowNum) -> new GetUserRes(
                         rs.getInt("id"),
-                        rs.getString("email"),
-                        rs.getString("password"),
-                        rs.getString("phoneNumber"),
                         rs.getString("userUrl"),
-                        rs.getString("nickname")),
+                        rs.getString("nickname"),
+                        rs.getInt("totalFollowCount"),
+                        rs.getInt("totalReviewCount"),
+                        rs.getInt("totalVisited"),
+                        rs.getInt("totalLike")),
                 getUserParams);
     }
 
@@ -131,30 +161,27 @@ public class UsersDao {
                 ),
                 getFolloewerParams);
     }
-//    public int modifyUserName(PatchUserReq patchUserReq){
-//        String modifyUserNameQuery = "update UserInfo set userName = ? where userIdx = ? ";
-//        Object[] modifyUserNameParams = new Object[]{patchUserReq.getUserName(), patchUserReq.getUserIdx()};
-//
-//        return this.jdbcTemplate.update(modifyUserNameQuery,modifyUserNameParams);
-//    }
-//
-//    public User getPwd(PostLoginReq postLoginReq){
-//        String getPwdQuery = "select userIdx, password,email,userName,ID from UserInfo where ID = ?";
-//        String getPwdParams = postLoginReq.getId();
-//
-//        return this.jdbcTemplate.queryForObject(getPwdQuery,
-//                (rs,rowNum)-> new User(
-//                        rs.getInt("userIdx"),
-//                        rs.getString("ID"),
-//                        rs.getString("userName"),
-//                        rs.getString("password"),
-//                        rs.getString("email")
-//                ),
-//                getPwdParams
-//                );
-//
-//    }
-//
-//
+
+    public Users getPwd(PostLoginReq postLoginReq){
+        String getPwdQuery = "select id,nickname, email, password from User where email = ?";
+        String getPwdParams = postLoginReq.getEmail();
+
+        return this.jdbcTemplate.queryForObject(getPwdQuery,
+                (rs,rowNum)-> new Users(
+                        rs.getInt("id"),
+                        rs.getString("nickname"),
+                        rs.getString("email"),
+                        rs.getString("password")
+                ),
+                getPwdParams
+                );
+    }
+
+    public int modifyNickname(PatchUserReq patchUserReq){
+        String modifyNicknameQuery = "update User set nickname = ?, email =?, phoneNumber=?, userUrl=? where id = ? ";
+        Object[] modifyNicknameParams = new Object[]{ patchUserReq.getNickname(),patchUserReq.getEmail(),patchUserReq.getPhoneNumber(),patchUserReq.getUserUrl(),patchUserReq.getId()};
+
+        return this.jdbcTemplate.update(modifyNicknameQuery,modifyNicknameParams);
+    }
 
 }

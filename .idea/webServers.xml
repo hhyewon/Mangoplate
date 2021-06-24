@@ -16,6 +16,13 @@
           </advancedOptions>
         </fileTransfer>
       </webServer>
+      <webServer id="f2346923-e2fb-4620-b345-937e51965ef3" name="mangomango" url="https://www.hiimhyewon.site">
+        <fileTransfer rootFolder="/var/www/mangoplate" accessType="SFTP" host="3.35.141.16" port="22" sshConfigId="18ac59c5-27a6-4d49-8f2c-5da449a420f8" sshConfig="ubuntu@3.35.141.16:22 key" keyPair="true">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" keepAliveTimeout="0" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
     </option>
   </component>
 </project>

@@ -2,8 +2,11 @@ package com.example.demo.src.users;
 
 
 import com.example.demo.config.BaseException;
+import com.example.demo.config.secret.Secret;
+import com.example.demo.src.users.model.PatchUserReq;
 import com.example.demo.src.users.model.PostUserReq;
 import com.example.demo.src.users.model.PostUserRes;
+import com.example.demo.utils.AES128;
 import com.example.demo.utils.JwtService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,32 +30,40 @@ public class UsersService {
         this.jwtService = jwtService;
     }
 
-
-
-
     public PostUserRes createUser(PostUserReq postUserReq) throws BaseException {
+        System.out.println("2");
+        if(usersProvider.checkEmail(postUserReq.getEmail()) ==1){
+            throw new BaseException(POST_USERS_EXISTS_EMAIL);
+        }
+        String pwd;
         try{
-            System.out.println("2");
-            if(usersProvider.checkEmail(postUserReq.getEmail()) ==1){
-                throw new BaseException(POST_USERS_EXISTS_EMAIL);
-            }
+            //암호화
+            pwd = new AES128(Secret.USER_INFO_PASSWORD_KEY).encrypt(postUserReq.getPassword());
+            postUserReq.setPassword(pwd);
+        } catch (Exception ignored) {
+            throw new BaseException(PASSWORD_ENCRYPTION_ERROR);
+        }
+        try{
             int id = usersDao.createUser(postUserReq);
             System.out.println("3");
-            return new PostUserRes(id);
+            //jwt 발급.
+            String jwt = jwtService.createJwt(id);
+            return new PostUserRes(jwt,id);
         } catch (Exception exception) {
             System.out.println(exception);
             throw new BaseException(DATABASE_ERROR);
         }
     }
-//
-//    public void modifyUserName(PatchUserReq patchUserReq) throws BaseException {
-//        try{
-//            int result = userDao.modifyUserName(patchUserReq);
-//            if(result == 0){
-//                throw new BaseException(MODIFY_FAIL_USERNAME);
-//            }
-//        } catch(Exception exception){
-//            throw new BaseException(DATABASE_ERROR);
-//        }
-//    }
+
+    public void modifyNickname(PatchUserReq patchUserReq) throws BaseException {
+        try{
+            int result = usersDao.modifyNickname(patchUserReq);
+            if(result == 0){
+                throw new BaseException(MODIFY_FAIL_USERNAME);
+            }
+        } catch(Exception exception){
+            System.out.println(exception);
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
 }

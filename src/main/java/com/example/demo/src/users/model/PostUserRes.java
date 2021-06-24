@@ -11,6 +11,6 @@ import javax.persistence.Table;
 @AllArgsConstructor
 @Table(name="User")
 public class PostUserRes {
-
+    private String jwt;
     private int id;
 }

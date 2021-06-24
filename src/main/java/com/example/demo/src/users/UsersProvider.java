@@ -2,9 +2,10 @@ package com.example.demo.src.users;
 
 
 import com.example.demo.config.BaseException;
-import com.example.demo.src.users.model.GetFollowerRes;
-import com.example.demo.src.users.model.GetRestaurantLikeRes;
-import com.example.demo.src.users.model.GetUserRes;
+import com.example.demo.config.secret.Secret;
+import com.example.demo.src.users.model.*;
+import com.example.demo.utils.AES128;
+import com.example.demo.utils.JwtService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -19,15 +20,17 @@ public class UsersProvider {
     final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private final UsersDao usersDao;
+    private final JwtService jwtService;
 
-    public UsersProvider(UsersDao usersDao) {
+    public UsersProvider(UsersDao usersDao, JwtService jwtService) {
         this.usersDao = usersDao;
+        this.jwtService = jwtService;
     }
 
 
-    public List<GetUserRes> getUsers() throws BaseException{
+    public List<GetUsersRes> getUsers() throws BaseException{
         try{
-            List<GetUserRes> getUserRes = usersDao.getUsers();
+            List<GetUsersRes> getUserRes = usersDao.getUsers();
             return getUserRes;
         }
         catch (Exception exception) {
@@ -38,6 +41,7 @@ public class UsersProvider {
 
     public GetUserRes getUser(int id) throws BaseException {
         try {
+
             System.out.println("4");
             GetUserRes getUserRes = usersDao.getUser(id);
             return getUserRes;
@@ -81,24 +85,27 @@ public class UsersProvider {
         }
     }
 
-//    public PostLoginRes logIn(PostLoginReq postLoginReq) throws BaseException{
-//        User user = userDao.getPwd(postLoginReq);
-//        String password;
-//        try {
-//            password = new AES128(Secret.USER_INFO_PASSWORD_KEY).decrypt(user.getPassword());
-//        } catch (Exception ignored) {
-//            throw new BaseException(PASSWORD_DECRYPTION_ERROR);
-//        }
-//
-//        if(postLoginReq.getPassword().equals(password)){
-//            int userIdx = userDao.getPwd(postLoginReq).getUserIdx();
-//            String jwt = jwtService.createJwt(userIdx);
-//            return new PostLoginRes(userIdx,jwt);
-//        }
-//        else{
-//            throw new BaseException(FAILED_TO_LOGIN);
-//        }
-//
-//    }
+
+    public PostLoginRes logIn(PostLoginReq postLoginReq) throws BaseException{
+        Users users = usersDao.getPwd(postLoginReq);
+        String password;
+        try {
+            //암호화
+            password = new AES128(Secret.USER_INFO_PASSWORD_KEY).decrypt(users.getPassword());
+        } catch (Exception ignored) {
+            throw new BaseException(PASSWORD_DECRYPTION_ERROR);
+        }
+
+        if(postLoginReq.getPassword().equals(password)){
+            int id = usersDao.getPwd(postLoginReq).getId();
+            //jwt 발급
+            String jwt = jwtService.createJwt(id);
+            return new PostLoginRes(id,jwt);
+        }
+        else{
+            throw new BaseException(FAILED_TO_LOGIN);
+        }
+
+    }
 
 }
