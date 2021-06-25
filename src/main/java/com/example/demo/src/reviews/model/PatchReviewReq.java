@@ -12,10 +12,11 @@ import javax.persistence.Table;
 @Table(name = "Review")
 public class PatchReviewReq {
 
-
+    private int id;
+    private int userId;
     private float score;
     private String reviewUrl;
     private String comment;
-    private int id;
+
 
 }

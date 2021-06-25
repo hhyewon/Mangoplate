@@ -11,7 +11,7 @@ public enum BaseResponseStatus {
      * 1000 : 요청 성공
      */
     SUCCESS(true, 1000, "요청에 성공하였습니다."),
-    SUCCESS_GET_RESTAURANTS(true, 1001, "식당 전체보기에 성공하였습니다."),
+//    SUCCESS_GET_RESTAURANTS(true, 1001, "식당 전체보기에 성공하였습니다."),
 
 
     /**
@@ -22,6 +22,7 @@ public enum BaseResponseStatus {
     EMPTY_JWT(false, 2001, "JWT를 입력해주세요."),
     INVALID_JWT(false, 2002, "유효하지 않은 JWT입니다."),
     INVALID_USER_JWT(false,2003,"권한이 없는 유저의 접근입니다."),
+    USERS_INVALID_USER_ID(false,2004,"유저 ID는 숫자로 입력해주세요"),
 
     // users
     USERS_EMPTY_USER_ID(false, 2010, "유저 아이디 값을 확인해주세요."),
@@ -35,7 +36,7 @@ public enum BaseResponseStatus {
     POST_USERS_EMPTY_PHONENUMBER(false, 2025, "전화번호를 입력해주세요."),
     POST_USERS_INVALID_PASSWORD(false, 2026, "최소 6~12자, 영문, 숫자 포함해서 입력해주세요"),
     PATCH_USERS_INVALID_NICKNAME(false,2027,"닉네임은 2자 이상이어야 합니다."),
-    POST_USERS_INVALID_PHONENUMBER(false,2028,"휴대폰 번호를 올바른 형식으로 입력해주세요 ex)01012345678"),
+    POST_USERS_INVALID_PHONENUMBER(false,2028,"전화번호를 올바른 형식으로 입력해주세요 ex)01012345678"),
     POST_USERS_INVALID_NICKNAME(false,2029,"20자 이하로 입력해주세요"),
 
     // [POST] /reviews
@@ -45,26 +46,28 @@ public enum BaseResponseStatus {
     POST_REVIEWS_INVALID_SCORE(false, 2043, "score에 1과 3사이의 점수를 입력해주세요."),
     POST_REVIEWS_INVALID_RESTAURANTID(false, 2044, "Id에 정수를 입력해주세요."),
     POST_REVIEWS_INVALID_REVIEWURL(false, 2045, "reviewUrl에 url형식으로 입력해주세요."),
+
     POST_REVIEWS_EMPTY_RST_NAME(false, 2046, "식당이름을 입력해주세요."),
     POST_REVIEWS_EMPTY_RST_LOCATION(false, 2047, "식당 위치를 입력해주세요."),
     POST_REVIEWS_EMPTY_RST_VARIETY(false, 2048, "식당 종류를 입력해주세요."),
     POST_REVIEWS_EMPTY_USERID(false, 2049, "유저 아이디를 입력해주세요."),
 
-
-
+    POST_REVIEWS_EMPTY_REPLY(false,2050,"댓글 내용을 입력해주세요"),
     // [GET] /restaurants/:restaurnatId
     POST_REVIEWS_EMPTY_RESTAURANTID(false, 2060, "식당 ID를 입력해주세요 "),
     POST_REVIEWS_INVALID_RESTAURANTID_RANGE(false, 2061, "값이 존재하지 않습니다. 식당 ID에 1부터 4까지의 숫자로 입력해주세요."),
 
 
-
     INVALID_STATUS(false, 2300,"Status 값을 ACTIVATE 혹은 INACTIVATE로 입력해주세요"),
     PATCH_EMPTY_STATUS(false, 2301,"Status 값을 입력해주세요"),
 
-    //POST// Rest
+    //POST// Rest/like
     POST_RESTAURANTS_EMPTY_USERID(false, 2400,"유저 ID 값을 입력해주세요"),
     POST_RESTAURANTS_EMPTY_RESTAURANTID(false, 2401,"식당 ID 값을 입력해주세요"),
     POST_RESTAURANTS_EMPTY(false, 2301,"Status 값을 입력해주세요"),
+
+    //POST /Restaurant
+
 
     //GET //REST
 
@@ -108,7 +111,11 @@ public enum BaseResponseStatus {
     MODIFY_FAIL_EMPTY(false,4018,"입력안된 값이 있습니다"),
 
     PASSWORD_ENCRYPTION_ERROR(false, 4011, "비밀번호 암호화에 실패하였습니다."),
-    PASSWORD_DECRYPTION_ERROR(false, 4012, "비밀번호 복호화에 실패하였습니다.");
+    PASSWORD_DECRYPTION_ERROR(false, 4012, "비밀번호 복호화에 실패하였습니다."),
+
+    //[PATCH] /restaruant/like
+    MODIFY_FAIL_ISLIKE(false,4040,"가고싶다 설정에 실패하였습니다.");
+
 
     // 5000 : 필요시 만들어서 쓰세요
     // 6000 : 필요시 만들어서 쓰세요

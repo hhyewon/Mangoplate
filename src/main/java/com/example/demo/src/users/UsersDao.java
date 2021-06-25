@@ -2,6 +2,7 @@ package com.example.demo.src.users;
 
 
 
+import com.example.demo.src.users.model.GetRestaurantVisitedRes;
 import com.example.demo.src.users.model.*;
 import com.example.demo.utils.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -138,7 +139,8 @@ public class UsersDao {
                 "                          from ReviewScore\n" +
                 "                          group by ReviewScore.id) Score\n" +
                 "                         on Restaurant.id = Score.reviewId\n" +
-                "where IsLike=1 \n";
+                "where IsLike=1 \n" +
+                "group by Restaurant.id";
         int getRestaurantLikeParams = userId;
         return this.jdbcTemplate.query(getRestaurantLikQuery,
                 (rs, rowNum) -> new GetRestaurantLikeRes(
@@ -153,11 +155,22 @@ public class UsersDao {
     }
 
     public List<GetFollowerRes> getfollower(int userId){
-        String getFolloewerQuery = "select followId from Follow where userId=? order by followId asc ";
+        String getFolloewerQuery = "select Follow.followId, nickname, count(*) as totalFollowCount, totalReviewCount\n" +
+                "from Follow\n" +
+                "    left outer join User on User.id=Follow.followId\n" +
+                "    left outer join (select Review.userId, count(*) as totalReviewCount\n" +
+                "                          from Review\n" +
+                "                          group by userId) Reviews\n" +
+                "                         on Follow.followId = Reviews.userId\n" +
+                "where Follow.userId = ?\n" +
+                "group by Follow.followId ";
         int getFolloewerParams = userId;
         return this.jdbcTemplate.query(getFolloewerQuery,
                 (rs, rowNum) -> new GetFollowerRes(
-                        rs.getInt("followId")
+                        rs.getInt("followId"),
+                        rs.getString("nickname"),
+                        rs.getInt("totalFollowCount"),
+                        rs.getInt("totalReviewCount")
                 ),
                 getFolloewerParams);
     }
@@ -182,6 +195,87 @@ public class UsersDao {
         Object[] modifyNicknameParams = new Object[]{ patchUserReq.getNickname(),patchUserReq.getEmail(),patchUserReq.getPhoneNumber(),patchUserReq.getUserUrl(),patchUserReq.getId()};
 
         return this.jdbcTemplate.update(modifyNicknameQuery,modifyNicknameParams);
+    }
+
+    public List<GetRestaurantVisitedRes> getRestaurantVisited(int id) {
+        String getRestaurantsvQuery = "select User.id\n" +
+                "     , userUrl\n" +
+                "     , totalReviewCount\n" +
+                "     , followCount\n" +
+                "     , nickname\n" +
+                "     , restaurantName\n" +
+                "     , substring(restaurantLocation, 7, 3)                   as restaurantLocation\n" +
+                "     , reviewUrl\n" +
+                "     , concat(nickname, '님이 ', restaurantName, '에 방문하였습니다.') as username\n" +
+                "     , reviewCount\n" +
+                "     , ifnull(IsLike.islike, 0)                              as IsLike\n" +
+                "     , ifnull(replytotal, 0)                                 as totalReply\n" +
+                "     , reply\n" +
+                "     , ifnull(IsVisited.isVisited, 0)                        as isVisited\n" +
+                "     , case\n" +
+                "           when timestampdiff(MINUTE, RestaurantVisited.createdAt, CURRENT_TIMESTAMP()) < 60\n" +
+                "               then concat(timestampdiff(MINUTE, RestaurantVisited.createdAt, CURRENT_TIMESTAMP()), '분전')\n" +
+                "           when timestampdiff(HOUR, RestaurantVisited.createdAt, CURRENT_TIMESTAMP()) < 24\n" +
+                "               then concat(timestampdiff(HOUR, RestaurantVisited.createdAt, CURRENT_TIMESTAMP()), '시간전')\n" +
+                "           when timestampdiff(DAY, RestaurantVisited.createdAt, CURRENT_TIMESTAMP()) < 30\n" +
+                "               then concat(timestampdiff(DAY, RestaurantVisited.createdAt, CURRENT_TIMESTAMP()), '일전')\n" +
+                "           else date_format(RestaurantVisited.createdAt, '%Y년-%m월-%d일')\n" +
+                "    end                                                      as createdAt\n" +
+                "from User\n" +
+                "         inner join RestaurantVisited on User.id = RestaurantVisited.userId\n" +
+                "         inner join Restaurant on Restaurant.id = RestaurantVisited.restaurantId\n" +
+                "         left outer join (select Review.id, reviewUrl\n" +
+                "                          from Review\n" +
+                "                                   inner join ReviewImage on Review.id = ReviewImage.reviewId) MainImage\n" +
+                "                         on MainImage.id = RestaurantVisited.userId\n" +
+                "         left outer join (select Review.restaurantId, count(*) as reviewCount\n" +
+                "                          from Review\n" +
+                "                          group by restaurantId) Reviews\n" +
+                "                         on Restaurant.id = Reviews.restaurantId\n" +
+                "         left outer join (select ReviewReply.reviewId, reply, count(*) as replytotal\n" +
+                "                          from ReviewReply\n" +
+                "                          group by reviewId) Replys on RestaurantVisited.userId = Replys.reviewId\n" +
+                "         left outer join (select RestaurantLike.restaurantId, RestaurantLike.userId, count(*) as isLike\n" +
+                "                          from RestaurantLike\n" +
+                "#                           where userId = ?\n" +
+                "                          group by restaurantId) IsLike\n" +
+                "                         on Restaurant.id = IsLike.restaurantId\n" +
+                "         left outer join (select RestaurantVisited.restaurantId, RestaurantVisited.userId, count(*) as isVisited\n" +
+                "                          from RestaurantVisited\n" +
+                "#                           where userId = ?\n" +
+                "                          group by restaurantId) IsVisited\n" +
+                "                         on Restaurant.id = IsVisited.restaurantId\n" +
+                "         inner join Follow on Follow.userId = User.id\n" +
+                "         inner join (select Follow.id, count(*) as followCount\n" +
+                "                     from Follow) FollowCount\n" +
+                "                    on User.id = Follow.userId\n" +
+                "         left outer join (select userId, count(*) as totalReviewCount\n" +
+                "                          from Review\n" +
+                "                          group by userId) ReviewCount\n" +
+                "                         on ReviewCount.userId = User.id\n" +
+                "where User.Id =?\n" +
+                "group by Restaurant.id";
+
+        int getRestaurantsvParams= id;
+        return this.jdbcTemplate.query(getRestaurantsvQuery,
+                (rs, rowNum) -> new GetRestaurantVisitedRes(
+                        rs.getInt("id"),
+                        rs.getString("userUrl"),
+                        rs.getInt("totalReviewCount"),
+                        rs.getInt("followCount"),
+                        rs.getString("nickname"),
+                        rs.getString("restaurantName"),
+                        rs.getString("restaurantLocation"),
+                        rs.getString("reviewUrl"),
+                        rs.getString("username"),
+                        rs.getInt("reviewCount"),
+                        rs.getInt("IsLike"),
+                        rs.getInt("totalReply"),
+                        rs.getString("reply"),
+                        rs.getInt("isVisited"),
+                        rs.getString("createdAt")),
+                getRestaurantsvParams
+        );
     }
 
 }

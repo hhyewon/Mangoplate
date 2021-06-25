@@ -29,9 +29,10 @@ public class ReviewsProvider {
 
     }
 
-    public List<GetReviewRes> getReviews() throws BaseException {
+    public GetReviewRes getReviews(int id) throws BaseException {
         try {
-            List<GetReviewRes> getReviewRes = reviewsDao.getReviews();
+            System.out.println("2");
+            GetReviewRes getReviewRes = reviewsDao.getReviews(id);
             return getReviewRes;
         } catch (Exception exception) {
             System.out.println(exception);

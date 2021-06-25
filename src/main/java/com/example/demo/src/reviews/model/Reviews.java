@@ -18,11 +18,12 @@ public class Reviews {
    private int id;
     private int reviewId;
     private int userId;
+    private float score;
     private int restaurantId;
 //    private String userName;
     private String comment;
    private String reviewUrl;
-    private float score;
+
     private String status;
 //    private int userId;
 //    @DateTimeFormat(pattern = "yyyy-MM")

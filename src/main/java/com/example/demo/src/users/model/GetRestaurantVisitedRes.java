@@ -1,4 +1,4 @@
-package com.example.demo.src.restaurants.model;
+package com.example.demo.src.users.model;
 
 
 import lombok.AllArgsConstructor;
@@ -23,7 +23,7 @@ public class GetRestaurantVisitedRes {
     private String username;
     private int reviewCount;
     private int IsLike;
-    private int replytotal;
+    private int totalReply;
     private String reply;
     private int isVisited;
     private String createdAt;

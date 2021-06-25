@@ -2,26 +2,18 @@ package com.example.demo.src.users;
 
 import com.example.demo.config.BaseException;
 import com.example.demo.config.BaseResponse;
+import com.example.demo.src.users.model.GetRestaurantVisitedRes;
 import com.example.demo.src.users.model.*;
 import com.example.demo.utils.JwtService;
-import com.fasterxml.jackson.databind.JsonNode;
-import org.omg.CORBA.NameValuePair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import static com.example.demo.config.BaseResponseStatus.*;
 import static com.example.demo.utils.ValidationRegex.*;
-import static jdk.nashorn.internal.objects.ArrayBufferView.length;
 
 @RestController
 //@RequestMapping("/users")
@@ -133,11 +125,17 @@ public class UsersController {
     }
 
 
+    //가고싶다 목록
     @ResponseBody
-    @GetMapping("/users/{userid}/likelist") // (GET) 127.0.0.1:9000/app/users/:userIdx
+    @GetMapping("/users/{userid}/like-list") // (GET) 127.0.0.1:9000/app/users/:userIdx
     public BaseResponse<List<GetRestaurantLikeRes>> getRestaurantLike(@PathVariable("userid") int userId) {
         // Get Users
         try {
+            int userIdByJwt = jwtService.getId();
+            //userIdx와 접근한 유저가 같은지 확인
+            if (userId != userIdByJwt) {
+                return new BaseResponse<>(INVALID_USER_JWT);
+            }
             if (userId == 0) {
                 return new BaseResponse<>(POST_REVIEWS_EMPTY_USERID);
             }
@@ -158,6 +156,11 @@ public class UsersController {
     @GetMapping("/users/{userid}/follower") // (GET) 127.0.0.1:9000/app/users
     public BaseResponse<List<GetFollowerRes>> getfollower(@PathVariable("userid") int userId) {
         try {
+            int userIdByJwt = jwtService.getId();
+            //userIdx와 접근한 유저가 같은지 확인
+            if (userId != userIdByJwt) {
+                return new BaseResponse<>(INVALID_USER_JWT);
+            }
             List<GetFollowerRes> getFollowerRes = usersProvider.getfollower(userId);
             return new BaseResponse<>(getFollowerRes);
         } catch (BaseException exception) {
@@ -170,6 +173,7 @@ public class UsersController {
     @PostMapping("/email-login")
     public BaseResponse<PostLoginRes> logIn(@RequestBody PostLoginReq postLoginReq) {
         try {
+
             if (postLoginReq.getEmail() == null) {
                 return new BaseResponse<>(POST_USERS_EMPTY_EMAIL);
             }
@@ -222,7 +226,6 @@ public class UsersController {
             if (patchUserRes.getNickname().length() < 2) {
                 return new BaseResponse<>(PATCH_USERS_INVALID_NICKNAME);
             }
-
             //jwt에서 idx 추출.
             int userIdByJwt = jwtService.getId();
             //userIdx와 접근한 유저가 같은지 확인
@@ -243,7 +246,30 @@ public class UsersController {
         }
     }
 
+    /**
+     * 가봤어요 조회 API
+     * [GET] /restaurants
+     */
 
+    @GetMapping("/users/{userid}/visited-list") // (GET) 127.0.0.1:9000/restaurants
+    public BaseResponse<List<GetRestaurantVisitedRes>> getRestaurantVisited(@PathVariable("userid") int id) {
+        try{
+            //jwt에서 idx 추출.
+            int userIdByJwt = jwtService.getId();
+            //userIdx와 접근한 유저가 같은지 확인
+            if (id != userIdByJwt) {
+                return new BaseResponse<>(INVALID_USER_JWT);
+            }
+            List<GetRestaurantVisitedRes> getRestaurantVisitedRes = usersProvider.getRestaurantVisited(id);
+            return new BaseResponse<>(getRestaurantVisitedRes);
+
+            // Get Users
+//            List<GetRestaurantRes> getRestaurantRes = restaurantsProvider.getRestaurantByRestaurantName(restaurantId);
+//            return new BaseResponse<>(getRestaurantRes);
+        } catch(BaseException exception){
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
 
 
 

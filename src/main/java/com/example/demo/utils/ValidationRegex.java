@@ -24,6 +24,14 @@ public class ValidationRegex {
              Matcher matcher = pattern.matcher(target);
              return matcher.find();
     }
+
+//    public static boolean isRegexId(String target){ //숫자만
+//        String regex = "^[0-9]+$";
+//        Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
+//        Matcher matcher = pattern.matcher(target);
+//        return matcher.find();
+//    }
+
 //^(?=.*[A-Za-z])(?=.*\d)(?=.*[~!@#$%^&*()+|=])[A-Za-z\d~!@#$%^&*()+|=]{6,12}$
 //^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{6,12}$
 //^(?=.*[A-Za-z])(?=.*[0-9])(?=.*[$@$!%*#?&])[A-Za-z[0-9]$@$!%*#?&]{8,20}$

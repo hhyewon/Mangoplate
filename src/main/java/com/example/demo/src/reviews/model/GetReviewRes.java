@@ -14,6 +14,7 @@ import javax.persistence.Table;
 public class GetReviewRes {
 
 //    @Column(name="id")
+    private int id;
     private int restaurantId;
     private String userUrl;
     private String nickname;
@@ -28,6 +29,6 @@ public class GetReviewRes {
     private String reviewUrl;
     private String reply;
     private String replyUpdatedAt;
-    private int replytotal;
+    private int replyTotal;
 
 }

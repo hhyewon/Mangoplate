@@ -27,14 +27,16 @@ public class RestaurantsService {
         this.jwtService = jwtService;
     }
 
-    public void patchRestaurantLike(PatchRestaurantReq patchRestaurantReq) throws BaseException {
+    public void patchRestaurantLike(PatchRestaurantReq patchRestaurantReq, int restaurantId,int userId) throws BaseException {
         try{
 
-            int result = restaurantsDao.patchRestaurantLike(patchRestaurantReq);
+            int result = restaurantsDao.patchRestaurantLike(patchRestaurantReq, restaurantId,userId);
             if(result == 0){
-                throw new BaseException(MODIFY_FAIL_USERNAME);
+                throw new BaseException(MODIFY_FAIL_ISLIKE);
             }
+            System.out.println("2");
         } catch(Exception exception){
+            System.out.println("3");
             System.out.println(exception);
             throw new BaseException(DATABASE_ERROR);
         }
@@ -53,11 +55,11 @@ public class RestaurantsService {
     }
 
     //POST
-    public PostRestaurantVisitedRes createRestaurantVisited(int restaurantId, int userId) throws BaseException {
+    public PostRestaurantVisitedRes createRestaurantVisited(int restaurantId, int userId, PostRestaurantVisitedReq postRestaurantVisitedReq) throws BaseException {
 
         try{
             System.out.println("2");
-            int id = restaurantsDao.createRestaurantVisited(restaurantId, userId);
+            int id = restaurantsDao.createRestaurantVisited(restaurantId, userId, postRestaurantVisitedReq);
             return new PostRestaurantVisitedRes(id);
         } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);

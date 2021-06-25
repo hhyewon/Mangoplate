@@ -36,14 +36,14 @@ public class ReviewsController {
     }
 
     /**
-     * 리뷰 전체 보기API
-     * [GET] /reviews
+     * 리뷰 상세 조회 API
+     * [GET] /reviews/:reviewid
      */
-    @GetMapping("") // (GET) 127.0.0.1:9000/restaurants
-    public BaseResponse<List<GetReviewRes>> getReviews() {
+    @GetMapping("/{reviewid}") // (GET) 127.0.0.1:9000/restaurants
+    public BaseResponse<GetReviewRes> getReviews(@PathVariable("reviewid") int id) {
         try{
-
-            List<GetReviewRes> getReviewRes = reviewsProvider.getReviews();
+            System.out.println("1");
+           GetReviewRes getReviewRes = reviewsProvider.getReviews(id);
             return new BaseResponse<>(getReviewRes);
 
             // Get Users
@@ -64,13 +64,23 @@ public class ReviewsController {
     @PostMapping("")
     public BaseResponse<PostReviewRes> createReview(@RequestBody PostReviewReq postReviewReq) {
         // TODO: email 관련한 짧은 validation 예시입니다. 그 외 더 부가적으로 추가해주세요!
-        if (postReviewReq.getComment() == null) {
-            return new BaseResponse<>(POST_REVIEWS_EMPTY_COMMENT);
-        }
 //        if (postReviewReq.getScore() == null) {
 //            return new BaseResponse<>(POST_REVIEWS_EMPTY_SCORE);
 //        }
         try {
+            //jwt에서 idx 추출.
+            int userIdByJwt = jwtService.getId();
+            //userIdx와 접근한 유저가 같은지 확인
+            if (postReviewReq.getUserId() != userIdByJwt) {
+                return new BaseResponse<>(INVALID_USER_JWT);
+            }
+            if (postReviewReq.getComment() == null) {
+                return new BaseResponse<>(POST_REVIEWS_EMPTY_COMMENT);
+            }
+            if(postReviewReq.getComment().length()>10000){
+                return new BaseResponse<>(POST_REVIEWS_INVALID_COMMENT);
+            }
+//            if (postReviewReq.getScore)
             System.out.println("6");
             PostReviewRes PostReviewRes = reviewsService.createReview(postReviewReq);
             return new BaseResponse<>(PostReviewRes);
@@ -80,12 +90,22 @@ public class ReviewsController {
     }
 
 
+    //리뷰 댓글달기
     @ResponseBody
     @PostMapping("/{reviewid}/reply")
     public BaseResponse<PostReviewRes> createReply(@PathVariable("reviewid") int reviewId, @RequestBody PostReplyReq postReplyReq) {
         try{
+            //jwt에서 idx 추출.
+            int userIdByJwt = jwtService.getId();
+            //userIdx와 접근한 유저가 같은지 확인
+            if (postReplyReq.getUserId() != userIdByJwt) {
+                return new BaseResponse<>(INVALID_USER_JWT);
+            }
+            if (postReplyReq.getReply().isEmpty()){
+                return new BaseResponse<>(POST_REVIEWS_EMPTY_REPLY);
+            }
             System.out.println("1");
-            PostReviewRes postReviewRes = reviewsService.createReply(postReplyReq);
+            PostReviewRes postReviewRes = reviewsService.createReply(reviewId, postReplyReq);
             return new BaseResponse<>(postReviewRes);
         } catch(BaseException exception){
             return new BaseResponse<>((exception.getStatus()));
@@ -94,7 +114,7 @@ public class ReviewsController {
 
 
         /**
-         * 리뷰 변경 API
+         * 리뷰 변경 API >>  having Review.userId=User.id
          * [PATCH] /users/:userIdx
          * @return BaseResponse<String>
          */
@@ -102,8 +122,14 @@ public class ReviewsController {
         @PatchMapping("/{reviewid}")
         public BaseResponse<String> modifyReview(@PathVariable("reviewid") int id, @RequestBody Reviews reviews){
             try {
+
+                int userIdByJwt = jwtService.getId();
+                //userIdx와 접근한 유저가 같은지 확인
+                if (reviews.getUserId() != userIdByJwt) {
+                    return new BaseResponse<>(INVALID_USER_JWT);
+                }
                 //같다면 리뷰 내용 변경
-                PatchReviewReq patchReviewReq = new PatchReviewReq(reviews.getScore(), reviews.getReviewUrl(), reviews.getComment(), reviews.getId() );
+                PatchReviewReq patchReviewReq = new PatchReviewReq(id, reviews.getUserId(), reviews.getScore(), reviews.getReviewUrl(), reviews.getComment());
                 reviewsService.modifyReview(patchReviewReq);
 
                 String result = "";
@@ -115,7 +141,7 @@ public class ReviewsController {
         }
 
     /**
-     * 리뷰 삭제 API
+     * 리뷰 삭제 API >> DELETE로 해보기
      * [PATCH] /users/:userIdx
      * @return BaseResponse<String>
      */

@@ -14,6 +14,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+
 import static com.example.demo.config.BaseResponseStatus.*;
 
 // Service Create, Update, Delete 의 로직 처리
@@ -35,6 +37,7 @@ public class ReviewsService {
 
 
     //POST
+    @Transactional
     public PostReviewRes createReview(PostReviewReq postReviewReq) throws BaseException {
     try {
         int id = reviewsDao.createReview(postReviewReq);
@@ -48,11 +51,11 @@ public class ReviewsService {
     }
 
     //POST
-    public PostReviewRes createReply(PostReplyReq postReplyReq) throws BaseException {
+    public PostReviewRes createReply(int reviewId, PostReplyReq postReplyReq) throws BaseException {
 
         try{
             System.out.println("2");
-            int id = reviewsDao.createReply(postReplyReq);
+            int id = reviewsDao.createReply(reviewId, postReplyReq);
             return new PostReviewRes(id);
         } catch (Exception exception) {
             System.out.println(exception);

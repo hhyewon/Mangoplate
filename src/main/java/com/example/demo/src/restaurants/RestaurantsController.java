@@ -3,6 +3,7 @@ package com.example.demo.src.restaurants;
 import com.example.demo.config.BaseException;
 import com.example.demo.config.BaseResponse;
 import com.example.demo.src.restaurants.model.*;
+import com.example.demo.utils.JwtService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +12,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 import static com.example.demo.config.BaseResponseStatus.*;
-import static com.example.demo.utils.ValidationRegex.isRegexEmail;
+//import static com.example.demo.utils.ValidationRegex.isRegexId;
+import static com.example.demo.utils.ValidationRegex.isRegexPhoneNumber;
 
 @RestController
 @RequestMapping("/restaurants")
@@ -23,27 +25,30 @@ public class RestaurantsController {
     private final RestaurantsProvider restaurantsProvider;
     @Autowired
     private final RestaurantsService restaurantsService;
+    @Autowired
+    private final JwtService jwtService;
 
-    public RestaurantsController(RestaurantsProvider restaurantsProvider, RestaurantsService restaurantsService){
+    public RestaurantsController(RestaurantsProvider restaurantsProvider, RestaurantsService restaurantsService, JwtService jwtService){
         this.restaurantsProvider = restaurantsProvider;
         this.restaurantsService = restaurantsService;
+        this.jwtService = jwtService;
     }
 
     /**
      * 식당 조회 API
      * [GET] /restaurants
+     * @RequestParam(required = false) String Email
+     *     private float userLatitude;
+     *     private float userLongitude;
+     *     @RequestParam(required = false) float userLatitude,
+     *                                                                 @RequestParam(required = false) float userLongitude
      */
 
     @GetMapping("") // (GET) 127.0.0.1:9000/restaurants
     public BaseResponse<List<GetRestaurantsRes>> getRestaurants() {
         try{
-
                 List<GetRestaurantsRes> getRestaurantsRes = restaurantsProvider.getRestaurants();
                 return new BaseResponse<>(getRestaurantsRes);
-
-            // Get Users
-//            List<GetRestaurantRes> getRestaurantRes = restaurantsProvider.getRestaurantByRestaurantName(restaurantId);
-//            return new BaseResponse<>(getRestaurantRes);
         } catch(BaseException exception){
             return new BaseResponse<>((exception.getStatus()));
         }
@@ -107,12 +112,12 @@ public class RestaurantsController {
     public BaseResponse<GetRestaurantInfoRes> getRestaurantInfo(@PathVariable("restaurantid") int id) {
         // Get Users
         try{
-            if (id == 0){
-                return new BaseResponse<>(POST_REVIEWS_EMPTY_RESTAURANTID);
-            }
-            if (id> 4 || id<1){
-                return new BaseResponse<>(POST_REVIEWS_INVALID_RESTAURANTID_RANGE);
-            }
+//            if (id == 0){
+//                return new BaseResponse<>(POST_REVIEWS_EMPTY_RESTAURANTID);
+//            }
+//            if (id> 4 || id<1){
+//                return new BaseResponse<>(POST_REVIEWS_INVALID_RESTAURANTID_RANGE);
+//            }
             GetRestaurantInfoRes getRestaurantInfoRes = restaurantsProvider.getRestaurantInfo(id);
 
             return new BaseResponse<>(getRestaurantInfoRes);
@@ -123,28 +128,36 @@ public class RestaurantsController {
     }
 
     /**
-     * 가고싶다 설정 API
+     * 가고싶다 설정 API >>ㅇㅣ상함 ..
      * [PATCH] /users/:userIdx
      * @return BaseResponse<String>
      */
     @ResponseBody
     @PatchMapping("/{restaurantid}/{userid}/like")
-    public BaseResponse<String> patchRestaurantLike(@PathVariable("restaurantid") int restaurantId, @PathVariable("userid") int userId, @RequestBody PatchRestaurantReq patchRestaurantReq){
+    public BaseResponse<String> patchRestaurantLike(@PathVariable("restaurantid") int restaurantId, @PathVariable("userid") int userId, @RequestBody PatchRestaurantRes patchRestaurantRes){
         try {
-            if(!patchRestaurantReq.getStatus().equals("ACTIVATE") || !patchRestaurantReq.getStatus().equals("INACTIVATE")){
+            if(!patchRestaurantRes.getStatus().equals("ACTIVATE") && !patchRestaurantRes.getStatus().equals("INACTIVATE")){
                 return new BaseResponse<>(INVALID_STATUS);
             }
-            if(patchRestaurantReq.getStatus() ==null){
+            if(patchRestaurantRes.getStatus() ==null){
                 return new BaseResponse<>(PATCH_EMPTY_STATUS);
             }
-            PatchRestaurantReq patchUserReq = new PatchRestaurantReq(patchRestaurantReq.getStatus(), restaurantId,userId);
-            restaurantsService.patchRestaurantLike(patchUserReq);
+//            //jwt에서 idx 추출.
+//            int userIdByJwt = jwtService.getId();
+//            //userIdx와 접근한 유저가 같은지 확인
+//            if (userId != userIdByJwt) {
+//                return new BaseResponse<>(INVALID_USER_JWT);
+//            }
+System.out.println("111");
+            PatchRestaurantReq patchRestaurantReq = new PatchRestaurantReq(patchRestaurantRes.getStatus(), restaurantId,userId);
+            restaurantsService.patchRestaurantLike(patchRestaurantReq, restaurantId,userId);
 
             String result = "";
             return new BaseResponse<>(result);
 
 
         } catch (BaseException exception) {
+            System.out.println("1");
             return new BaseResponse<>((exception.getStatus()));
         }
     }
@@ -160,6 +173,12 @@ public class RestaurantsController {
     @PostMapping("")
     public BaseResponse<PostRestaurantRes> createRestaurant(@RequestBody PostRestaurantReq postRestaurantReq) {
         try{
+                        //jwt에서 idx 추출.
+            int userIdByJwt = jwtService.getId();
+            //userIdx와 접근한 유저가 같은지 확인
+            if (postRestaurantReq.getUserId() != userIdByJwt) {
+                return new BaseResponse<>(INVALID_USER_JWT);
+            }
             if(postRestaurantReq.getRestaurantName() == null){
                 return new BaseResponse<>(POST_REVIEWS_EMPTY_RST_NAME);
             }
@@ -172,6 +191,12 @@ public class RestaurantsController {
             if(postRestaurantReq.getUserId() == 0){
                 return new BaseResponse<>(POST_REVIEWS_EMPTY_USERID);
             }
+            if (!isRegexPhoneNumber(postRestaurantReq.getRestaurantNumber())) {
+                return new BaseResponse<>(POST_USERS_INVALID_PHONENUMBER);
+            }
+//            if(!isRegexId(postRestaurantReq.getUserId())){
+//                return new BaseResponse<>(USERS_INVALID_USER_ID);
+//            }
 
             System.out.println("1");
             PostRestaurantRes postRestaurantRes = restaurantsService.createRestaurant(postRestaurantReq);
@@ -190,41 +215,18 @@ public class RestaurantsController {
     // Body
     @ResponseBody
     @PostMapping("/{restaurantid}/{userid}/visited")
-    public BaseResponse<PostRestaurantVisitedRes> createRestaurantVisited(@PathVariable("restaurantid") int restaurantId,@PathVariable("userid") int userId) {
+    public BaseResponse<PostRestaurantVisitedRes> createRestaurantVisited(@PathVariable("restaurantid") int restaurantId, @PathVariable("userid") int userId, @RequestBody PostRestaurantVisitedReq postRestaurantVisitedReq) {
         try{
-            if(restaurantId==0){
-                return new BaseResponse<>(POST_RESTAURANTS_EMPTY_RESTAURANTID);
-            }
-            if (userId ==0){
-                return new BaseResponse<>(POST_RESTAURANTS_EMPTY_USERID);
-            }
             System.out.println("1");
-            PostRestaurantVisitedRes postRestaurantVisitedRes = restaurantsService.createRestaurantVisited(restaurantId,userId);
+            PostRestaurantVisitedRes postRestaurantVisitedRes = restaurantsService.createRestaurantVisited(restaurantId,userId, postRestaurantVisitedReq);
             return new BaseResponse<>(postRestaurantVisitedRes);
         } catch(BaseException exception){
+            System.out.println(exception);
             return new BaseResponse<>((exception.getStatus()));
         }
     }
 
-    /**
-     * 가봤어요 조회 API
-     * [GET] /restaurants
-     */
 
-    @GetMapping("/{restaurantid}/{userid}/visited-list") // (GET) 127.0.0.1:9000/restaurants
-    public BaseResponse<List<GetRestaurantVisitedRes>> getRestaurantVisited(@PathVariable("restaurantid") int restaurantId, @PathVariable("userid") int userId) {
-        try{
-
-            List<GetRestaurantVisitedRes> getRestaurantVisitedRes = restaurantsProvider.getRestaurantVisited();
-            return new BaseResponse<>(getRestaurantVisitedRes);
-
-            // Get Users
-//            List<GetRestaurantRes> getRestaurantRes = restaurantsProvider.getRestaurantByRestaurantName(restaurantId);
-//            return new BaseResponse<>(getRestaurantRes);
-        } catch(BaseException exception){
-            return new BaseResponse<>((exception.getStatus()));
-        }
-    }
 
 
 

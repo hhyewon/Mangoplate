@@ -3,6 +3,7 @@ package com.example.demo.src.users;
 
 import com.example.demo.config.BaseException;
 import com.example.demo.config.secret.Secret;
+import com.example.demo.src.users.model.GetRestaurantVisitedRes;
 import com.example.demo.src.users.model.*;
 import com.example.demo.utils.AES128;
 import com.example.demo.utils.JwtService;
@@ -106,6 +107,16 @@ public class UsersProvider {
             throw new BaseException(FAILED_TO_LOGIN);
         }
 
+    }
+
+    public List<GetRestaurantVisitedRes> getRestaurantVisited(int id) throws BaseException {
+        try {
+            List<GetRestaurantVisitedRes> getRestaurantVisitedRes = usersDao.getRestaurantVisited(id);
+            return getRestaurantVisitedRes;
+        } catch (Exception exception) {
+            System.out.println(exception);
+            throw new BaseException(DATABASE_ERROR);
+        }
     }
 
 }

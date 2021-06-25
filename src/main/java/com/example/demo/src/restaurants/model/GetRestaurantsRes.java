@@ -17,12 +17,16 @@ public class GetRestaurantsRes {
 
 //    @Column(name="id")
     private int id;
+    private String restaurantUrl;
     private String restaurantName;
-    private String firstUrl;
     private String restaurantLocation;
     private float distance;
-    private int totalViews;
-    private int totalReviews;
+    private int totalViewCount;
+    private int totalReviewCount;
     private float rating;
+    private int totalLike;
     private int isLike;
+//
+//    private float userLatitude;
+//    private float userLongitude;
 }

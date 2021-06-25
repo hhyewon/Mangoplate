@@ -12,5 +12,9 @@ import javax.persistence.Table;
 @Table(name="Follow")
 public class GetFollowerRes {
 //    private int userId;
+
     private int followId;
+    private String nickname;
+    private int totalFollowCount;
+    private int totalReviewCount;
 }

@@ -36,6 +36,7 @@ public class RestaurantsProvider {
             List<GetRestaurantsRes> getRestaurantsRes = restaurantsDao.getRestaurants();
             return getRestaurantsRes;
         } catch (Exception exception) {
+            System.out.println(exception);
             throw new BaseException(DATABASE_ERROR);
         }
     }
@@ -46,6 +47,7 @@ public class RestaurantsProvider {
                 return getRestaurantRes;
             }
             catch (Exception exception) {
+
                 throw new BaseException(DATABASE_ERROR);
             }
         }
@@ -72,14 +74,7 @@ public class RestaurantsProvider {
         }
     }
 
-    public List<GetRestaurantVisitedRes> getRestaurantVisited() throws BaseException {
-        try {
-            List<GetRestaurantVisitedRes> getRestaurantVisitedRes = restaurantsDao.getRestaurantVisited();
-            return getRestaurantVisitedRes;
-        } catch (Exception exception) {
-            throw new BaseException(DATABASE_ERROR);
-        }
-    }
+
 
 
 }
