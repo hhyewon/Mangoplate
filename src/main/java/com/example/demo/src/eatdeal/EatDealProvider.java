@@ -40,6 +40,8 @@ public class EatDealProvider {
         }
     }
 
+
+
         public GetEatDealDetailRes getEatdealDetail(int id) throws BaseException{
             try{
                 GetEatDealDetailRes getEatDealDetailRes = eatDealDao.getEatdealDetail(id);
