@@ -29,7 +29,6 @@ public class EatDealProvider {
     }
 
 
-
     public List<GetEatDealRes> getEatdeal() throws BaseException {
         try {
             List<GetEatDealRes> getEatDealRes = eatDealDao.getEatdeal();
