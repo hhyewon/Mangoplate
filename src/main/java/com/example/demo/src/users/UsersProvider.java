@@ -48,7 +48,7 @@ public class UsersProvider {
             return getUserRes;
         } catch (Exception exception) {
             System.out.println("40");
-            throw new BaseException(DATABASE_ERROR);
+            throw new BaseException(FAILED_TO_USER);
         }
     }
 
@@ -71,7 +71,7 @@ public class UsersProvider {
         } catch (Exception exception) {
             System.out.println(exception);
             System.out.println("40");
-            throw new BaseException(DATABASE_ERROR);
+            throw new BaseException(FAILED_TO_LIKED_LIST);
         }
     }
 
@@ -82,7 +82,7 @@ public class UsersProvider {
         }
         catch (Exception exception) {
             System.out.println(exception);
-            throw new BaseException(DATABASE_ERROR);
+            throw new BaseException(FAILED_TO_FOLLOWERS);
         }
     }
 
@@ -115,7 +115,7 @@ public class UsersProvider {
             return getRestaurantVisitedRes;
         } catch (Exception exception) {
             System.out.println(exception);
-            throw new BaseException(DATABASE_ERROR);
+            throw new BaseException(FAILED_TO_VISITED_LIST);
         }
     }
 

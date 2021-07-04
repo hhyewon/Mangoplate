@@ -2,8 +2,22 @@
 <project version="4">
   <component name="WebServers">
     <option name="servers">
-      <webServer id="7eb4f200-81ea-4432-9ce0-43fd3e2c934d" name="mangoplateProject" url="https://www.hiimhyewon.site">
-        <fileTransfer rootFolder="/var/www/mangoplateProject" accessType="SFTP" host="3.35.141.16" port="22" sshConfigId="18ac59c5-27a6-4d49-8f2c-5da449a420f8" sshConfig="ubuntu@3.35.141.16:22 key" keyPair="true">
+      <webServer id="f041922b-96ea-4f56-8d2d-16638b582f27" name="mangoplate" url="https://www.hiimhyewon.site">
+        <fileTransfer rootFolder="/var/www/mangoplate" accessType="SFTP" host="3.35.141.16" port="22" sshConfigId="18ac59c5-27a6-4d49-8f2c-5da449a420f8" sshConfig="ubuntu@3.35.141.16:22 key" keyPair="true">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" keepAliveTimeout="0" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+      <webServer id="3830a4f6-7462-421b-9873-7bae2c676233" name="bn-mangoplate" url="https://www.hiimhyewon.site">
+        <fileTransfer rootFolder="/var/www/bn-mangoplate" accessType="SFTP" host="3.35.141.16" port="22" sshConfigId="18ac59c5-27a6-4d49-8f2c-5da449a420f8" sshConfig="ubuntu@3.35.141.16:22 key" keyPair="true">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" keepAliveTimeout="0" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+      <webServer id="e55b2eab-6c6c-4133-90ce-17249e6d9fed" name="bn-mangoplate2" url="https://www.hiimhyewon.site">
+        <fileTransfer rootFolder="/var/www/bn-mangoplate" accessType="SFTP" host="3.35.141.16" port="22" sshConfigId="18ac59c5-27a6-4d49-8f2c-5da449a420f8" sshConfig="ubuntu@3.35.141.16:22 key" keyPair="true">
           <advancedOptions>
             <advancedOptions dataProtectionLevel="Private" keepAliveTimeout="0" passiveMode="true" shareSSLContext="true" />
           </advancedOptions>

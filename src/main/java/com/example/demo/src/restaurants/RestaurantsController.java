@@ -65,18 +65,16 @@ public class RestaurantsController {
     public BaseResponse<GetRestaurantRes> getRestaurant(@PathVariable("restaurantid") int id) {
         // Get Users
         try{
-            if (id == 0){
+
+            if (id==0){
                 return new BaseResponse<>(POST_REVIEWS_EMPTY_RESTAURANTID);
             }
-            if (id> 4 || id<1){
-                return new BaseResponse<>(POST_REVIEWS_INVALID_RESTAURANTID_RANGE);
-            }
-
             GetRestaurantRes getRestaurantRes = restaurantsProvider.getRestaurant(id);
 
 //            if(!isRegexId(getRestaurantRes.getId())){
 //                return new BaseResponse<>(POST_REVIEWS_INVALID_RESTAURANTID);
 //            }
+
             return new BaseResponse<>(getRestaurantRes);
         } catch(BaseException exception){
             return new BaseResponse<>((exception.getStatus()));
@@ -108,7 +106,7 @@ public class RestaurantsController {
      */
     //    Path-variable
     @ResponseBody
-    @GetMapping("/{restaurantid}/info") // (GET) 127.0.0.1:9000/app/users/:userIdx
+    @GetMapping("/{restaurantid}/convenience") // (GET) 127.0.0.1:9000/app/users/:userIdx
     public BaseResponse<GetRestaurantInfoRes> getRestaurantInfo(@PathVariable("restaurantid") int id) {
         // Get Users
         try{
@@ -127,40 +125,7 @@ public class RestaurantsController {
 
     }
 
-    /**
-     * 가고싶다 설정 API >>ㅇㅣ상함 ..
-     * [PATCH] /users/:userIdx
-     * @return BaseResponse<String>
-     */
-    @ResponseBody
-    @PatchMapping("/{restaurantid}/{userid}/like")
-    public BaseResponse<String> patchRestaurantLike(@PathVariable("restaurantid") int restaurantId, @PathVariable("userid") int userId, @RequestBody PatchRestaurantRes patchRestaurantRes){
-        try {
-            if(!patchRestaurantRes.getStatus().equals("ACTIVATE") && !patchRestaurantRes.getStatus().equals("INACTIVATE")){
-                return new BaseResponse<>(INVALID_STATUS);
-            }
-            if(patchRestaurantRes.getStatus() ==null){
-                return new BaseResponse<>(PATCH_EMPTY_STATUS);
-            }
-//            //jwt에서 idx 추출.
-//            int userIdByJwt = jwtService.getId();
-//            //userIdx와 접근한 유저가 같은지 확인
-//            if (userId != userIdByJwt) {
-//                return new BaseResponse<>(INVALID_USER_JWT);
-//            }
-System.out.println("111");
-            PatchRestaurantReq patchRestaurantReq = new PatchRestaurantReq(patchRestaurantRes.getStatus(), restaurantId,userId);
-            restaurantsService.patchRestaurantLike(patchRestaurantReq, restaurantId,userId);
 
-            String result = "";
-            return new BaseResponse<>(result);
-
-
-        } catch (BaseException exception) {
-            System.out.println("1");
-            return new BaseResponse<>((exception.getStatus()));
-        }
-    }
 
 
     /**
@@ -217,6 +182,11 @@ System.out.println("111");
     @PostMapping("/{restaurantid}/{userid}/visited")
     public BaseResponse<PostRestaurantVisitedRes> createRestaurantVisited(@PathVariable("restaurantid") int restaurantId, @PathVariable("userid") int userId, @RequestBody PostRestaurantVisitedReq postRestaurantVisitedReq) {
         try{
+            int userIdByJwt = jwtService.getId();
+            //userIdx와 접근한 유저가 같은지 확인
+            if (userId != userIdByJwt) {
+                return new BaseResponse<>(INVALID_USER_JWT);
+            }
             System.out.println("1");
             PostRestaurantVisitedRes postRestaurantVisitedRes = restaurantsService.createRestaurantVisited(restaurantId,userId, postRestaurantVisitedReq);
             return new BaseResponse<>(postRestaurantVisitedRes);
@@ -228,6 +198,38 @@ System.out.println("111");
 
 
 
+    /**
+     * 가고싶다 설정 API
+     * [PATCH] /users/:userIdx
+     * @return BaseResponse<String>
+     */
+    @ResponseBody
+    @PatchMapping("/{restaurantid}/{userid}/like")
+    public BaseResponse<String> patchLike(@RequestParam(required = false) String status, @PathVariable("userid") int userId , @PathVariable("restaurantid") int restaurantId) {
+        try{
+            int userIdByJwt = jwtService.getId();
+            //userIdx와 접근한 유저가 같은지 확인
+            if (userId != userIdByJwt) {
+                return new BaseResponse<>(INVALID_USER_JWT);
+            }
+
+            if(!status.equals("ACTIVATE") && !status.equals("INACTIVATE")){
+                return new BaseResponse<>(INVALID_STATUS);
+            }
+            if(status==null){
+                return new BaseResponse<>(PATCH_EMPTY_STATUS);
+            }
+            // Get Users
+            PatchRestaurantRes patchRestaurantRes = new PatchRestaurantRes(status, userId, restaurantId);
+            restaurantsService.patchLike(status, userId, restaurantId);
+//            return new BaseResponse<>(patchRestaurantRes);
+            String result = "";
+            return new BaseResponse<>(result);
+        } catch(BaseException exception){
+            return new BaseResponse<>((exception.getStatus()));
+        }
+
+    }
 
 
 }

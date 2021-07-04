@@ -19,6 +19,7 @@ import javax.transaction.Transactional;
 import static com.example.demo.config.BaseResponseStatus.*;
 
 // Service Create, Update, Delete 의 로직 처리
+@Transactional
 @Service
 public class ReviewsService {
     final Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -46,7 +47,7 @@ public class ReviewsService {
 //        return new PostReviewRes(reviewsDao.createReview(postReviewReq));
     }catch (Exception exception){
         System.out.println(exception);
-        throw new BaseException(DATABASE_ERROR);
+        throw new BaseException(FAILED_TO_POST_REVIEW);
     }
     }
 
@@ -59,7 +60,7 @@ public class ReviewsService {
             return new PostReviewRes(id);
         } catch (Exception exception) {
             System.out.println(exception);
-            throw new BaseException(DATABASE_ERROR);
+            throw new BaseException(FAILED_TO_CREATE_REPLY);
         }
     }
 
@@ -73,7 +74,7 @@ public class ReviewsService {
 
         } catch(Exception exception){
             System.out.println(exception);
-            throw new BaseException(DATABASE_ERROR);
+            throw new BaseException(FAILED_TO_MODIFY_REVIEW);
         }
     }
     public void modifyReviewDel(PatchReviewDelReq patchReviewDelReq) throws BaseException {

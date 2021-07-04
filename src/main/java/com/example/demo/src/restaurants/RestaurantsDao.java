@@ -37,8 +37,6 @@ public class RestaurantsDao {
                 "     , round(rating, 2)                    as rating\n" +
                 "     , ifnull(totalLike, 0)                as totalLike\n" +
                 "     , ifnull(isLike, 0)                   as isLike\n" +
-                "    ,UserLocation.userLatitude" +
-                "    ,UserLocation.userLongitude" +
                 "   from Restaurant\n" +
                 "         inner join UserLocation\n" +
                 "         left outer join (select ReviewImage.reviewId, reviewUrl as restaurantUrl\n" +
@@ -198,12 +196,7 @@ public class RestaurantsDao {
     }
 
 
-    public int patchRestaurantLike(PatchRestaurantReq patchRestaurantReq, int userId, int restaurantId) {
-        String modifyRestaurantLikeQuery = "update RestaurantLike set status =? where userId =? and restaurantId = ? ";
-        Object[] modifyRestaurantLikeParams = new Object[]{patchRestaurantReq.getStatus(), userId, restaurantId};
 
-        return this.jdbcTemplate.update(modifyRestaurantLikeQuery, modifyRestaurantLikeParams);
-    }
 
     public int createRestaurant(PostRestaurantReq postRestaurantReq) {
         System.out.println("3");
@@ -216,13 +209,18 @@ public class RestaurantsDao {
     }
 
     public int createRestaurantVisited(int restaurantId, int userId, PostRestaurantVisitedReq postRestaurantVisitedReq) {
-        System.out.println("3");
         String createRestaurantVisitedQuery = "insert into RestaurantVisited (restaurantId, userId) VALUES (?,?)";
         Object[] createRestaurantVisitedParams = new Object[]{restaurantId, userId,postRestaurantVisitedReq.getRestaurantId(), postRestaurantVisitedReq.getUserId()};
         this.jdbcTemplate.update(createRestaurantVisitedQuery, createRestaurantVisitedParams);
-        System.out.println("4");
         String lastInserIdQuery = "select last_insert_id()";
         return this.jdbcTemplate.queryForObject(lastInserIdQuery, int.class);
+    }
+
+    public int patchLike(String status, int userId, int restaurantId) {
+        String modifyRestaurantLikeQuery = "update RestaurantLike set status =? where userId =? and restaurantId = ? ";
+        Object[] modifyRestaurantLikeParams = new Object[]{status, userId, restaurantId};
+
+        return this.jdbcTemplate.update(modifyRestaurantLikeQuery, modifyRestaurantLikeParams);
     }
 
 

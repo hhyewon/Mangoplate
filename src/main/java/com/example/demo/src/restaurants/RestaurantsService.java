@@ -10,6 +10,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+import java.util.List;
+
 import static com.example.demo.config.BaseResponseStatus.*;
 
 @Service
@@ -27,22 +30,10 @@ public class RestaurantsService {
         this.jwtService = jwtService;
     }
 
-    public void patchRestaurantLike(PatchRestaurantReq patchRestaurantReq, int restaurantId,int userId) throws BaseException {
-        try{
 
-            int result = restaurantsDao.patchRestaurantLike(patchRestaurantReq, restaurantId,userId);
-            if(result == 0){
-                throw new BaseException(MODIFY_FAIL_ISLIKE);
-            }
-            System.out.println("2");
-        } catch(Exception exception){
-            System.out.println("3");
-            System.out.println(exception);
-            throw new BaseException(DATABASE_ERROR);
-        }
-    }
 
     //POST
+    @Transactional
     public PostRestaurantRes createRestaurant(PostRestaurantReq postRestaurantReq) throws BaseException {
 
         try{
@@ -50,7 +41,7 @@ public class RestaurantsService {
             int id = restaurantsDao.createRestaurant(postRestaurantReq);
             return new PostRestaurantRes(id);
         } catch (Exception exception) {
-            throw new BaseException(DATABASE_ERROR);
+            throw new BaseException(FAILED_TO_CREATE_RESTAURANT);
         }
     }
 
@@ -62,8 +53,21 @@ public class RestaurantsService {
             int id = restaurantsDao.createRestaurantVisited(restaurantId, userId, postRestaurantVisitedReq);
             return new PostRestaurantVisitedRes(id);
         } catch (Exception exception) {
-            throw new BaseException(DATABASE_ERROR);
+            throw new BaseException(FAILED_TO_RESTAURANT_VISITED);
         }
     }
+
+
+    public void patchLike(String status, int userId, int restaurantId) throws BaseException{
+        try{
+            int result =restaurantsDao.patchLike(status, userId, restaurantId);
+//            List<PatchRestaurantRes> patchRestaurantRes =
+//            return new PatchRestaurantRes(id);
+        }
+        catch (Exception exception) {
+            throw new BaseException(FAILED_TO_RESTAURANT_LIKE);
+        }
+    }
+
 
 }

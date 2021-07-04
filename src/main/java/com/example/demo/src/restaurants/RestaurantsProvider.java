@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import static com.example.demo.config.BaseResponseStatus.DATABASE_ERROR;
+import static com.example.demo.config.BaseResponseStatus.*;
 
 
 @Service
@@ -21,6 +21,7 @@ public class RestaurantsProvider {
 
     private final RestaurantsDao restaurantsDao;
     private final JwtService jwtService;
+    private  GetRestaurantsRes getRestaurantsRes;
 
     final Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -37,7 +38,7 @@ public class RestaurantsProvider {
             return getRestaurantsRes;
         } catch (Exception exception) {
             System.out.println(exception);
-            throw new BaseException(DATABASE_ERROR);
+            throw new BaseException(FAILED_TO_RESTAURANTS);
         }
     }
 
@@ -48,7 +49,7 @@ public class RestaurantsProvider {
             }
             catch (Exception exception) {
 
-                throw new BaseException(DATABASE_ERROR);
+                throw new BaseException(FAILED_TO_RESTAURANT);
             }
         }
 
@@ -60,7 +61,7 @@ public class RestaurantsProvider {
             return getRestaurantMenuRes;
         } catch (Exception exception) {
             System.out.println(exception);
-            throw new BaseException(DATABASE_ERROR);
+            throw new BaseException(FAILED_TO_RESTAURANT_MENU);
         }
     }
 
@@ -70,7 +71,7 @@ public class RestaurantsProvider {
             return getRestaurantInfoRes;
         }
         catch (Exception exception) {
-            throw new BaseException(DATABASE_ERROR);
+            throw new BaseException(FAILED_TO_RESTAURANT_CONVENIENCE);
         }
     }
 

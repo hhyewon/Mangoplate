@@ -67,10 +67,16 @@ public class UsersController {
     public BaseResponse<GetUserRes> getUser(@PathVariable("userid") int id) {
         // Get Users
         try {
+            int userIdByJwt = jwtService.getId();
+            //userIdx와 접근한 유저가 같은지 확인
+            if (id != userIdByJwt) {
+                return new BaseResponse<>(INVALID_USER_JWT);
+            }
 
             if (id == 0) {
                 return new BaseResponse<>(USERS_EMPTY_USER_ID);
             }
+
             GetUserRes getUserRes = usersProvider.getUser(id);
             return new BaseResponse<>(getUserRes);
         } catch (BaseException exception) {
@@ -87,7 +93,7 @@ public class UsersController {
      */
     // Body
     @ResponseBody
-    @PostMapping("/sign-in")
+    @PostMapping("/sign-up")
     public BaseResponse<PostUserRes> createUser(@RequestBody PostUserReq postUserReq) {
         try {
             if (postUserReq.getEmail() == null) {
@@ -270,6 +276,8 @@ public class UsersController {
             return new BaseResponse<>((exception.getStatus()));
         }
     }
+
+    //kakao-login
 
 
 

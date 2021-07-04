@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 import static com.example.demo.config.BaseResponseStatus.DATABASE_ERROR;
+import static com.example.demo.config.BaseResponseStatus.FAILED_TO_REVIEWS;
 
 //Provider : Read의 비즈니스 로직 처리
 @Service
@@ -36,7 +37,7 @@ public class ReviewsProvider {
             return getReviewRes;
         } catch (Exception exception) {
             System.out.println(exception);
-            throw new BaseException(DATABASE_ERROR);
+            throw new BaseException(FAILED_TO_REVIEWS);
         }
 
 

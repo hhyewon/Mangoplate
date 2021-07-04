@@ -4,10 +4,6 @@ package com.example.demo.src.eatdeal;
 import com.example.demo.config.BaseException;
 import com.example.demo.src.eatdeal.model.GetEatDealDetailRes;
 import com.example.demo.src.eatdeal.model.GetEatDealRes;
-import com.example.demo.src.restaurants.model.GetRestaurantInfoRes;
-import com.example.demo.src.restaurants.model.GetRestaurantMenuRes;
-import com.example.demo.src.restaurants.model.GetRestaurantRes;
-import com.example.demo.src.restaurants.model.GetRestaurantsRes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import static com.example.demo.config.BaseResponseStatus.DATABASE_ERROR;
+import static com.example.demo.config.BaseResponseStatus.*;
 
 
 @Service
@@ -39,7 +35,8 @@ public class EatDealProvider {
             List<GetEatDealRes> getEatDealRes = eatDealDao.getEatdeal();
             return getEatDealRes;
         } catch (Exception exception) {
-            throw new BaseException(DATABASE_ERROR);
+
+            throw new BaseException(FAILED_TO_EAT_DEAL);
         }
     }
 
@@ -49,7 +46,8 @@ public class EatDealProvider {
                 return getEatDealDetailRes;
             }
             catch (Exception exception) {
-                throw new BaseException(DATABASE_ERROR);
+                System.out.println(exception);
+                throw new BaseException(FAILED_TO_EAT_DEAL_DETAIL);
             }
         }
 //

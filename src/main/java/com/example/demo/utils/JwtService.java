@@ -64,7 +64,7 @@ public class JwtService {
                     .setSigningKey(Secret.JWT_SECRET_KEY)
                     .parseClaimsJws(accessToken);
         } catch (Exception ignored) {
-            throw new BaseException(INVALID_JWT);
+            throw new BaseException(EMPTY_JWT_LOGIN);
         }
 
         // 3. userIdx 추출

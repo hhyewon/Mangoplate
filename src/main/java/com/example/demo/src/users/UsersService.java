@@ -13,6 +13,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+
 import static com.example.demo.config.BaseResponseStatus.*;
 
 // Service Create, Update, Delete 의 로직 처리
@@ -30,6 +32,7 @@ public class UsersService {
         this.jwtService = jwtService;
     }
 
+    @Transactional
     public PostUserRes createUser(PostUserReq postUserReq) throws BaseException {
         System.out.println("2");
         if(usersProvider.checkEmail(postUserReq.getEmail()) ==1){
@@ -51,7 +54,7 @@ public class UsersService {
             return new PostUserRes(jwt,id);
         } catch (Exception exception) {
             System.out.println(exception);
-            throw new BaseException(DATABASE_ERROR);
+            throw new BaseException(FAILED_TO_EMAIL_SIGN_UP);
         }
     }
 
@@ -63,7 +66,7 @@ public class UsersService {
             }
         } catch(Exception exception){
             System.out.println(exception);
-            throw new BaseException(DATABASE_ERROR);
+            throw new BaseException(FAILED_TO_MODIFY_USER);
         }
     }
 }

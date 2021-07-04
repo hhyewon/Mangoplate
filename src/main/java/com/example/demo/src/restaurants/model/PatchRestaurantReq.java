@@ -15,9 +15,9 @@ public class PatchRestaurantReq {
 
 
 
-
     private String status;
-    private int userId;
-    private int restaurantId;
+
+
+
 
 }

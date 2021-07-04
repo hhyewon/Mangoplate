@@ -21,6 +21,7 @@ public enum BaseResponseStatus {
     REQUEST_ERROR(false, 2000, "입력값을 확인해주세요."),
     EMPTY_JWT(false, 2001, "JWT를 입력해주세요."),
     INVALID_JWT(false, 2002, "유효하지 않은 JWT입니다."),
+    EMPTY_JWT_LOGIN(false,2001,"로그인이 필요한 서비스입니다."),
     INVALID_USER_JWT(false,2003,"권한이 없는 유저의 접근입니다."),
     USERS_INVALID_USER_ID(false,2004,"유저 ID는 숫자로 입력해주세요"),
 
@@ -82,15 +83,45 @@ public enum BaseResponseStatus {
     // Common
     RESPONSE_ERROR(false, 3000, "값을 불러오는데 실패하였습니다."),
 
+    //실패 /user
+    FAILED_TO_EMAIL_SIGN_UP(false,3000,"이메일로 회원가입에 실패하였습니다."),
+    FAILED_TO_EMAIL_LOGIN(false,3000,"이메일로 로그인에 실패하였습니다."),
+    FAILED_TO_MODIFY_USER(false,3000,"회원정보 변경에 실패하였습니다."),
+    FAILED_TO_USER(false,3000,"유저 프로필 조회에 실패하였습니다."),
+    FAILED_TO_RESTAURANT_LIKE(false,3000,"가고싶다에 실패하였습니다."),
+    FAILED_TO_RESTAURANT_VISITED(false,3000,"가봤어요에 실패하였습니다."),
+    FAILED_TO_FOLLOWERS(false,3000,"팔로워 조회에 실패하였습니다."),
+    FAILED_TO_VISITED_LIST(false,3000,"가봤어요 조회에 실패하였습니다."),
+    FAILED_TO_LIKED_LIST(false,3000,"가고싶다 조회에 실패하였습니다."),
+
+    //실패 /restaurants
+    FAILED_TO_RESTAURANTS(false,3000,"식당 전체 조회에 실패하였습니다."),
+    FAILED_TO_RESTAURANT(false,3000,"식당 상세 조회에 실패하였습니다."),
+    FAILED_TO_CREATE_RESTAURANT(false,3000,"식당 상세 조회에 실패하였습니다."),
+    FAILED_TO_RESTAURANT_CONVENIENCE(false,3000,"식당 편의정보 조회에 실패하였습니다."),
+    FAILED_TO_RESTAURANT_MENU(false,3000,"식당 메뉴 조회에 실패하였습니다."),
+
+
+    //실패 /review
+    FAILED_TO_REVIEWS(false,3000,"리뷰 조회에 실패하였습니다."),
+    FAILED_TO_POST_REVIEW(false,3000,"리뷰 작성에 실패하였습니다."),
+    FAILED_TO_MODIFY_REVIEW(false,3000,"리뷰 수정에 실패하였습니다."),
+    FAILED_TO_CREATE_REPLY(false,3000,"리뷰 댓글 달기에 실패하였습니다."),
+
+    //실패 /eat-deal
+    FAILED_TO_EAT_DEAL(false,3000,"잇딜 조회에 실패하였습니다."),
+    FAILED_TO_EAT_DEAL_DETAIL(false,3000,"잇딜 상세 조회에 실패하였습니다."),
+
+
     // [POST] /users
     DUPLICATED_EMAIL(false, 3013, "중복된 이메일입니다."),
     FAILED_TO_LOGIN(false,3014,"없는 아이디거나 비밀번호가 틀렸습니다."),
 
-    // [GET] /restaurants
-    RESTAURNATS_RESPONSE_ERROR(false, 3000, "식당 조회를 실패하셨습니다."),
 
-
-
+    NOT_FOUND_RESTAURANTID(false, 3021, "존재하지 않는 식당 입니다."),
+    NOT_FOUND_REVIEWID(false, 3022, "존재하지 않는 리뷰 입니다."),
+    NOT_FOUND_EATDEALID(false, 3024, "존재하지 않는 잇딜 입니다."),
+    NOT_FOUND_USERID(false, 3023, "존재하지 않는 유저 입니다."),
 
 
     /**
