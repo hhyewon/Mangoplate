@@ -46,7 +46,6 @@ public class RestaurantsService {
 
     //POST
     public PostRestaurantVisitedRes createRestaurantVisited(int restaurantId, int userId, PostRestaurantVisitedReq postRestaurantVisitedReq) throws BaseException {
-
         try{
             System.out.println("2");
             int id = restaurantsDao.createRestaurantVisited(restaurantId, userId, postRestaurantVisitedReq);
