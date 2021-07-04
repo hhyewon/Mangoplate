@@ -40,6 +40,7 @@ public class RestaurantsService {
             System.out.println("2");
             int id = restaurantsDao.createRestaurant(postRestaurantReq);
             return new PostRestaurantRes(id);
+
         } catch (Exception exception) {
             throw new BaseException(FAILED_TO_CREATE_RESTAURANT);
         }
