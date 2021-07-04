@@ -36,6 +36,7 @@ public class RestaurantsService {
     @Transactional
     public PostRestaurantRes createRestaurant(PostRestaurantReq postRestaurantReq) throws BaseException {
 
+
         try{
             System.out.println("2");
             int id = restaurantsDao.createRestaurant(postRestaurantReq);
