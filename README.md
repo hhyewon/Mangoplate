@@ -13,7 +13,7 @@
  <img src="https://img.shields.io/badge/-Amazon AWS-232F3E?style=flat&logo=AmazonAWS"> <img src="https://img.shields.io/badge/-EC2-232F3E?style=flat&logo=EC2"> <img src="https://img.shields.io/badge/-RDS-232F3E?style=flat&logo=RDS">
  <img src="https://img.shields.io/badge/-NGINX-009639?style=flat&logo=NGINX">
 
- <img src="https://img.shields.io/badge/-IntelliJ IDEA-000000?style=flat&logo=IntelliJIDEA"> <img src="https://img.shields.io/badge/-Postman-FF6C37?style=flat&logo=Postman"> <img src="https://img.shields.io/badge/-AqueryTool-4AA8D8?style=flat&logo=AqueryTool">
+ <img src="https://img.shields.io/badge/-IntelliJ IDEA-000000?style=flat&logo=IntelliJIDEA">  <img src="https://img.shields.io/badge/-DataGrip IDEA-000000?style=flat&logo=DataGrip"> <img src="https://img.shields.io/badge/-Postman-FF6C37?style=flat&logo=Postman"> <img src="https://img.shields.io/badge/-AqueryTool-4AA8D8?style=flat&logo=AqueryTool">
 
  <img src="https://img.shields.io/badge/-Spring Boot-6DB33F?style=flat&logo=SpringBoot"> <img src="https://img.shields.io/badge/-Java-007396?style=flat&logo=Java"> <img src="https://img.shields.io/badge/-JSON-000000?style=flat&logo=JSON"> <img src="https://img.shields.io/badge/-MySQL-4479A1?style=flat&logo=MySQL">
 
