@@ -2,7 +2,7 @@
 본 템플릿은 소프트스퀘어드 서버 교육용 Spring Boot 템플릿 입니다. (2021 ver.)
 
 ### ERD 설계도
-- ![image](https://user-images.githubusercontent.com/73240332/124960284-1db35280-e057-11eb-85a6-ceb79cb57dfe.png)
+![image](https://user-images.githubusercontent.com/73240332/124960284-1db35280-e057-11eb-85a6-ceb79cb57dfe.png)
 - URL : https://aquerytool.com/aquerymain/index/?rurl=c5fd8665-5070-41c9-9863-2d52a577f04d&
 - Password : t420f1
 
