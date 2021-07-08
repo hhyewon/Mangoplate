@@ -103,20 +103,34 @@ public class ReviewsDao {
     }
 
 
-    public int modifyReview(PatchReviewReq patchReviewReq){
-        String modifyReviewQuery = "update Review \n" +
-                "left outer join ReviewImage on ReviewImage.reviewId = Review.id\n" +
-                "left outer join ReviewScore on ReviewScore.reviewId = Review.id\n" +
-                "set userId =?," +
-                "   ReviewScore.score    = ?,\n" +
-                "    ReviewImage.reviewUrl=?,\n" +
-                "    Review.comment=?\n" +
-                "where Review.id =?;";
-        Object[] modifyReviewParams = new Object[]{ patchReviewReq.getUserId(), patchReviewReq.getScore(),   patchReviewReq.getReviewUrl(),patchReviewReq.getComment(),patchReviewReq.getId() };
+    //리뷰 수정하기
+    public int modifyReview(int id,PatchReviewReq patchReviewReq){
+        String modifyReviewQuery = "update Review set userId =?, comment =? where Review.id=?;";
+        Object[] modifyReviewParams = new Object[]{ patchReviewReq.getUserId(), patchReviewReq.getComment(),id };
 
         return this.jdbcTemplate.update(modifyReviewQuery,modifyReviewParams);
 
     }
+
+    //리뷰 수정하기
+    public int modifyReviewScore(int id, PatchReviewReq patchReviewReq){
+        String modifyReviewQuery = "update ReviewScore set score =? where reviewId =?;";
+        Object[] modifyReviewParams = new Object[]{patchReviewReq.getScore(), id};
+
+        return this.jdbcTemplate.update(modifyReviewQuery,modifyReviewParams);
+
+    }
+
+    //리뷰 수정하기
+    public int modifyReviewImage(int id, PatchReviewReq patchReviewReq){
+        String modifyReviewQuery = "update ReviewImage set reviewUrl =? where reviewId =?;";
+        Object[] modifyReviewParams = new Object[]{patchReviewReq.getReviewUrl(), id };
+
+        return this.jdbcTemplate.update(modifyReviewQuery,modifyReviewParams);
+
+    }
+
+
 
     public int createReply(int reviewId,PostReplyReq postReplyReq){
         System.out.println("3");

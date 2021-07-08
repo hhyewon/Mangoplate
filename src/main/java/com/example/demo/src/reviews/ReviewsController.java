@@ -129,8 +129,8 @@ public class ReviewsController {
                     return new BaseResponse<>(INVALID_USER_JWT);
                 }
                 //같다면 리뷰 내용 변경
-                PatchReviewReq patchReviewReq = new PatchReviewReq(id, reviews.getUserId(), reviews.getScore(), reviews.getReviewUrl(), reviews.getComment());
-                reviewsService.modifyReview(patchReviewReq);
+                PatchReviewReq patchReviewReq = new PatchReviewReq(id, reviews.getReviewId(), reviews.getUserId(), reviews.getScore(), reviews.getReviewUrl(), reviews.getComment());
+                reviewsService.modifyReview(id, patchReviewReq);
 
                 String result = "";
                 return new BaseResponse<>(result);

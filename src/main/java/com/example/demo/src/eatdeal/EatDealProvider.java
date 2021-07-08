@@ -48,7 +48,7 @@ public class EatDealProvider {
             }
             catch (Exception exception) {
                 System.out.println(exception);
-                throw new BaseException(FAILED_TO_EAT_DEAL_DETAIL);
+                throw new BaseException(NOT_FOUND_EATDEALID);
             }
         }
 //

@@ -65,9 +65,12 @@ public class ReviewsService {
     }
 
     //Patch
-    public void modifyReview(PatchReviewReq patchReviewReq) throws BaseException {
+    public void modifyReview(int id, PatchReviewReq patchReviewReq) throws BaseException {
         try{
-            int result = reviewsDao.modifyReview(patchReviewReq);
+
+            int result = reviewsDao.modifyReviewScore(id, patchReviewReq);
+            int result2 = reviewsDao.modifyReviewImage(id, patchReviewReq);
+            int result3 = reviewsDao.modifyReview(id, patchReviewReq);
             if(result == 0){
                 throw new BaseException(MODIFY_FAIL_EMPTY);
             }

@@ -148,6 +148,8 @@ public class RestaurantsDao {
 
     }
 
+
+
     public List<GetRestaurantMenuRes> getRestaurantMenu(int restaurantId) {
         String getRestaurantMenuQuery = "select restaurantId\n" +
                 "     , concat('마지막 업데이트: ', date_format(RestaurantMenu.updatedAt, '%Y-%m-%d')) as updatedAt\n" +
@@ -223,5 +225,24 @@ public class RestaurantsDao {
         return this.jdbcTemplate.update(modifyRestaurantLikeQuery, modifyRestaurantLikeParams);
     }
 
+
+    public int patchConvenience(int id, PatchRestaurantConvenienceReq patchRestaurantConvenienceReq) {
+        String patchConvenienceQuery = "update Restaurant set openHour=?, closeHour=? , breakTimeStart=? , breakTimeEnd=?, offDays=?, variety=? , isParking=?, userId=?  where id = ?; ";
+        Object[] patchConvenienceParams = new Object[]{patchRestaurantConvenienceReq.getOpenHour(), patchRestaurantConvenienceReq.getCloseHour(), patchRestaurantConvenienceReq.getBreakTimeStart(), patchRestaurantConvenienceReq.getBreakTimeEnd(), patchRestaurantConvenienceReq.getOffDays(), patchRestaurantConvenienceReq.getVariety(), patchRestaurantConvenienceReq.getIsParking(), patchRestaurantConvenienceReq.getUserId(), id};
+
+        return this.jdbcTemplate.update(patchConvenienceQuery, patchConvenienceParams);
+    }
+
+    public int patchMenu(int restaurantId, PatchRestaurantMenuReq patchRestaurantMenuReq) {
+        String patchMenuQuery = "update RestaurantMenu set menuName =?, price =? where restaurantId = ?; ";
+        Object[] patchMenuParams = new Object[]{patchRestaurantMenuReq.getMenuName(), patchRestaurantMenuReq.getPrice(), restaurantId};
+        return this.jdbcTemplate.update(patchMenuQuery, patchMenuParams);
+    }
+
+    public int patchMenuUserId(int restaurantId, PatchRestaurantMenuReq patchRestaurantMenuReq) {
+        String patchMenuQuery = "update Restaurant set userId=? where id = ?; ";
+        Object[] patchMenuParams = new Object[]{patchRestaurantMenuReq.getUserId(), restaurantId};
+        return this.jdbcTemplate.update(patchMenuQuery, patchMenuParams);
+    }
 
 }

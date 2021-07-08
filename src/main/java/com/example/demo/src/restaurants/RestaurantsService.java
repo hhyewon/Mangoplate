@@ -68,4 +68,25 @@ public class RestaurantsService {
     }
 
 
+    public void patchConvenience(int id, PatchRestaurantConvenienceReq patchRestaurantConvenienceReq) throws BaseException{
+        try{
+            int result =restaurantsDao.patchConvenience(id, patchRestaurantConvenienceReq);
+        }
+        catch (Exception exception) {
+            throw new BaseException(FAILED_TO_RESTAURANT_LIKE);
+        }
+    }
+
+    public void patchMenu(int restaurantId, PatchRestaurantMenuReq patchRestaurantMenuReq) throws BaseException{
+        try{
+            int result =restaurantsDao.patchMenu(restaurantId, patchRestaurantMenuReq);
+            int result2 =restaurantsDao.patchMenuUserId(restaurantId, patchRestaurantMenuReq);
+        }
+        catch (Exception exception) {
+            System.out.println(exception);
+            throw new BaseException(FAILED_TO_RESTAURANT_LIKE);
+        }
+    }
+
+
 }

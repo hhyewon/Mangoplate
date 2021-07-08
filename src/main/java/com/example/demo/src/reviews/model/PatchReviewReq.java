@@ -13,6 +13,7 @@ import javax.persistence.Table;
 public class PatchReviewReq {
 
     private int id;
+    private int reviewId;
     private int userId;
     private float score;
     private String reviewUrl;

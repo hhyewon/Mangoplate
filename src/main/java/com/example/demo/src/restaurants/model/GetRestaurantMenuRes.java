@@ -5,15 +5,8 @@ import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.format.annotation.DateTimeFormat;
-
-import javax.persistence.Column;
-import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.xml.transform.Result;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Date;
 
 @Getter
 @Setter
@@ -22,10 +15,16 @@ import java.util.Date;
 @Table(name = "RestaurantMenu")
 public class GetRestaurantMenuRes {
 //    @SerializedName("a")
-    private int restaurantId;
-    private String updatedAt;
+//    private int restaurantId;
+    private Example example;
     private String menuName;
     private int price;
 
-
+    public GetRestaurantMenuRes(int restaurantId, String updatedAt, String menuName, int price) {
+//        this.restaurantId = restaurantId;
+        this.example = new Example();
+//        this.updatedAt = updatedAt;
+        this.menuName = menuName;
+        this.price = price;
+    }
 }

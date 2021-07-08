@@ -90,7 +90,7 @@ public class RestaurantsController {
     @GetMapping("/{restaurantid}/menu") // (GET) 127.0.0.1:9000/restaurants
     public BaseResponse<List<GetRestaurantMenuRes>> getRestaurantMenu(@PathVariable("restaurantid") int restaurantId) {
         try{
-                System.out.println("1");
+            System.out.println("1");
             List<GetRestaurantMenuRes> getRestaurantMenuRes = restaurantsProvider.getRestaurantMenu(restaurantId);
             return new BaseResponse<>(getRestaurantMenuRes);
         } catch(BaseException exception){
@@ -220,7 +220,7 @@ public class RestaurantsController {
                 return new BaseResponse<>(PATCH_EMPTY_STATUS);
             }
             // Get Users
-            PatchRestaurantRes patchRestaurantRes = new PatchRestaurantRes(status, userId, restaurantId);
+//            PatchRestaurantRes patchRestaurantRes = new PatchRestaurantRes(status, userId, restaurantId);
             restaurantsService.patchLike(status, userId, restaurantId);
 //            return new BaseResponse<>(patchRestaurantRes);
             String result = "";
@@ -231,5 +231,54 @@ public class RestaurantsController {
 
     }
 
+
+
+    /**
+     * 식당 정보 변경 API
+     * [PATCH] /restaurants/:restaurantid/convenience
+     * @return BaseResponse<String>
+     */
+    @ResponseBody
+    @PatchMapping("/{restaurantid}/convenience")
+    public BaseResponse<String> patchConvenience(@PathVariable("restaurantid") int id, @RequestBody PatchRestaurantConvenienceReq patchRestaurantConvenienceReq) {
+        try{
+            int userIdByJwt = jwtService.getId();
+            //userIdx와 접근한 유저가 같은지 확인
+            if (patchRestaurantConvenienceReq.getUserId() != userIdByJwt) {
+                return new BaseResponse<>(INVALID_USER_JWT);
+            }
+            restaurantsService.patchConvenience(id, patchRestaurantConvenienceReq);
+            String result = "";
+            return new BaseResponse<>(result);
+
+        } catch(BaseException exception){
+            return new BaseResponse<>((exception.getStatus()));
+        }
+
+    }
+
+    /**
+     * 식당 메뉴 변경 API
+     * [PATCH] /restaurants/:restaurantid/convenience
+     * @return BaseResponse<String>
+     */
+    @ResponseBody
+    @PatchMapping("/{restaurantid}/menu")
+    public BaseResponse<String> patchMenu(@PathVariable("restaurantid") int restaurantId, @RequestBody PatchRestaurantMenuReq patchRestaurantMenuReq) {
+        try{
+            int userIdByJwt = jwtService.getId();
+            //userIdx와 접근한 유저가 같은지 확인
+            if (patchRestaurantMenuReq.getUserId() != userIdByJwt) {
+                return new BaseResponse<>(INVALID_USER_JWT);
+            }
+            restaurantsService.patchMenu(restaurantId, patchRestaurantMenuReq);
+            String result = "";
+            return new BaseResponse<>(result);
+
+        } catch(BaseException exception){
+            return new BaseResponse<>((exception.getStatus()));
+        }
+
+    }
 
 }
