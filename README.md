@@ -1,24 +1,25 @@
-## ✨ ERD 설계도
+## 📌 ERD 설계도
 ![image](https://user-images.githubusercontent.com/73240332/124960284-1db35280-e057-11eb-85a6-ceb79cb57dfe.png)
 > URL : https://aquerytool.com/aquerymain/index/?rurl=c5fd8665-5070-41c9-9863-2d52a577f04d&
 
 > Password : t420f1
 
 
-## ✨ API 명세서
+## 📌 API 명세서
 > URL: https://docs.google.com/spreadsheets/d/1Ojbjete8f-Afuofcz5ch0kyBbzSOYg-I7VEKBeauLQw/edit?usp=sharing
 
 
-## ✨ 개발환경
+## 📌 개발환경
  <img src="https://img.shields.io/badge/-Amazon AWS-232F3E?style=flat&logo=AmazonAWS"> <img src="https://img.shields.io/badge/-EC2-232F3E?style=flat&logo=EC2"> <img src="https://img.shields.io/badge/-RDS-232F3E?style=flat&logo=RDS">
  <img src="https://img.shields.io/badge/-NGINX-009639?style=flat&logo=NGINX">
 
- <img src="https://img.shields.io/badge/-IntelliJ IDEA-000000?style=flat&logo=IntelliJIDEA"> <img src="https://img.shields.io/badge/-Postman-FF6C37?style=flat&logo=Postman">
+ <img src="https://img.shields.io/badge/-IntelliJ IDEA-000000?style=flat&logo=IntelliJIDEA"> <img src="https://img.shields.io/badge/-Postman-FF6C37?style=flat&logo=Postman"> <img src="https://img.shields.io/badge/-AqueryTool-4AA8D8?style=flat&logo=AqueryTool">
 
  <img src="https://img.shields.io/badge/-Spring Boot-6DB33F?style=flat&logo=SpringBoot"> <img src="https://img.shields.io/badge/-Java-007396?style=flat&logo=Java"> <img src="https://img.shields.io/badge/-JSON-000000?style=flat&logo=JSON"> <img src="https://img.shields.io/badge/-MySQL-4479A1?style=flat&logo=MySQL">
 
-## ✨ REST API
-REST API의 기본 구성 원리를 반드시 구글링하여 익힌 뒤에 Route를 구성하자.
+
+
+## 📌 REST API
 
 ### Folder Structure
 - `src`: 메인 로직
@@ -37,18 +38,6 @@ REST API의 기본 구성 원리를 반드시 구글링하여 익힌 뒤에 Rout
 
 
 ### Comparison
-3개 템플릿 모두 다음과 같이 Request에 대해 DB 단까지 거친 뒤, 다시 Controller로 돌아와 Response 해주는 구조를 갖는다. 구조를 먼저 이해하고 템플릿을 사용하자.
-> `Request` -> Route -> Controller -> Service/Provider -> DAO -> DB
-
-> DB -> DAO -> Service/Provider -> Controller -> Route -> `Response`
-
-다음은 각 템플릿 별 차이점을 비교 기술해 놓은 것이다.
-#### PHP (패키지매니저 = composer)
-> Request(시작) / Response(끝) ⇄ Router (index.php) ⇄ Controller  ⇄ Service (CUD) / Provider (R) ⇄ PDO (DB)
-
-#### Node.js (패키지매니저 = npm)
-> Request(시작) / Response(끝)  ⇄ Router (*Route.js) ⇄ Controller (*Controller.js) ⇄ Service (CUD) / Provider (R) ⇄ DAO (DB)
-
 #### Springboot java (패키지매니저 = Maven (= Spring 선호), Gradle (Springboot 선호))
 > Request(시작) / Response(끝) ⇄ Controller(= Router + Controller) ⇄ Service (CUD) / Provider (R) ⇄ DAO (DB)
 
@@ -57,7 +46,7 @@ REST API의 기본 구성 원리를 반드시 구글링하여 익힌 뒤에 Rout
 값, 형식, 길이 등의 형식적 Validation은 Controller에서,
 DB에서 검증해야 하는 의미적 Validation은 Provider 혹은 Service에서 처리하면 된다.
 
-## ✨Structure
+## 📌Structure
 앞에 (*)이 붙어있는 파일(or 폴더)은 추가적인 과정 이후에 생성된다.
 ```text
 api-server-spring-boot
@@ -110,7 +99,7 @@ build.gradle // gradle 빌드시에 필요한 dependency 설정하는 곳
 .gitignore // git 에 포함되지 않아야 하는 폴더, 파일들을 작성 해놓는 곳
 
 ```
-## ✨Description
+## 📌Description
 
 ### Annotation
 스프링 부트는 `어노테이션`을 다양하게 아는 것이 중요하다. SpringBoot의 시작점을 알리는 `@SpringBootApplication` 어노테이션 뿐만 아니라 `스프링 부트 어노테이션` 등의 키워드로 구글링 해서 **스프링 부트에서 자주 사용되는 다양한 어노테이션을 이해하고 외워두자.**
@@ -194,26 +183,14 @@ Response할 때, 공통 부분은 묶고 다른 부분은 제네릭을 통해 �
 `Service`
 > **CUD(Create, Update, Delete)** 와 관련된 곳이다. **CUD**에서 **R**이 필요한 경우가 있는데, 그럴 때는 `Provider`에 구성되어 있는 것을 `Service`에서 사용하면 된다.
 
-**1) 메소드명**
-
-메소드의 prefix로 다음 규칙을 따르고 있다.
-
-C → createXXX `createInfo`
-
-R → retrieveXXX `retrieveInfoList`
-
-U → updateXXX `updateInfo`
-
-D → deleteXXX `deleteInfo`
-
-**2) BaseException**
+** BaseException**
 
 `BaseException`을 통해 `Service`나 `Provider`에서 `Controller`에 Exception을 던진다. 마찬가지로 Status 값은 `BaseResponseStatus` 의 `enum`을 통해 관리한다.
 
 #### 3. DAO / `UserDao.java`
 JdbcTemplate을 사용하여 구성되어 있다. 자세한 내용은 이곳 [공식 문서](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/jdbc/core/JdbcTemplate.html) 와 템플릿의 기본 예제를 참고하자.
 
-## ✨Usage
+## 📌 Usage
 ### API 만들기 예제
 로컬에서 DemoApplication을 실행시킨다. (로컬 서버 구동 시)
 
@@ -228,7 +205,7 @@ JdbcTemplate을 사용하여 구성되어 있다. 자세한 내용은 이곳 [�
 4. 포스트맨을 통해 본인이 만든 API 테스트가 잘 되는지 확인한다.
 
 ### nohup
-무중단 서비스를 위해 nohup을 사용한다. 자세한 내용은 환경 구축 실습 영상을 참고하자.
+무중단 서비스를 위해 nohup을 사용한다.
 
 ### Error
 서버 Error를 마주했다면, 원인을 파악할 수 있는 다양한 방법들을 통해 문제 원인을 찾자.
