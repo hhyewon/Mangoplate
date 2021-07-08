@@ -1,12 +1,11 @@
-### ERD 설계도
+## ✨ ERD 설계도
 ![image](https://user-images.githubusercontent.com/73240332/124960284-1db35280-e057-11eb-85a6-ceb79cb57dfe.png)
 - URL : https://aquerytool.com/aquerymain/index/?rurl=c5fd8665-5070-41c9-9863-2d52a577f04d&
 - Password : t420f1
 
 
-### API 명세서
+## ✨ API 명세서
 - URL: https://docs.google.com/spreadsheets/d/1Ojbjete8f-Afuofcz5ch0kyBbzSOYg-I7VEKBeauLQw/edit?usp=sharing
-
 
 
 
