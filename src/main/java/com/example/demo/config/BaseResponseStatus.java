@@ -69,6 +69,10 @@ public enum BaseResponseStatus {
 
     //POST /Restaurant
 
+    //PATCH
+    PATCH_RESTAURANTS_INVALID_TIME(false, 2500, "00:00~24:00의 숫자로 입력해주세요."),
+    PATCH_RESTAURANTS_INVALID_DAYS(false, 2501, "월부터 금까지의 요일을 입력해주세요"),
+    PATCH_RESTAURANTS_INVALID_ISPARKING(false, 2502, "Yes 혹은 No를 입력해주세요."),
 
     //GET //REST
 
@@ -99,6 +103,8 @@ public enum BaseResponseStatus {
     FAILED_TO_RESTAURANT(false,3000,"식당 상세 조회에 실패하였습니다."),
     FAILED_TO_CREATE_RESTAURANT(false,3000,"식당 상세 조회에 실패하였습니다."),
     FAILED_TO_RESTAURANT_CONVENIENCE(false,3000,"식당 편의정보 조회에 실패하였습니다."),
+    FAILED_TO_MODIFY_RESTAURANT_MENU_(false,3000,"식당 메뉴 수정에 실패하였습니다."),
+    FAILED_TO_MODIFY_RESTAURANT_CONVENIENCE(false,3000,"식당 편의정보 수정에 실패하였습니다."),
     FAILED_TO_RESTAURANT_MENU(false,3000,"식당 메뉴 조회에 실패하였습니다."),
 
 

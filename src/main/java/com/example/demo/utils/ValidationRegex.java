@@ -25,6 +25,13 @@ public class ValidationRegex {
              return matcher.find();
     }
 
+    public static boolean isRegexTime(String target){
+        String regex = "^([01][0-9]|2[0-3]):([0-5][0-9])$";  //24:00
+        Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(target);
+        return matcher.find();
+    }
+
 //    public static boolean isRegexId(String target){ //숫자만
 //        String regex = "^[0-9]+$";
 //        Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);

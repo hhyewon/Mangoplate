@@ -12,8 +12,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 import static com.example.demo.config.BaseResponseStatus.*;
+import static com.example.demo.utils.ValidationRegex.*;
 //import static com.example.demo.utils.ValidationRegex.isRegexId;
-import static com.example.demo.utils.ValidationRegex.isRegexPhoneNumber;
+
 
 @RestController
 @RequestMapping("/restaurants")
@@ -247,6 +248,22 @@ public class RestaurantsController {
             if (patchRestaurantConvenienceReq.getUserId() != userIdByJwt) {
                 return new BaseResponse<>(INVALID_USER_JWT);
             }
+
+            if(!patchRestaurantConvenienceReq.getIsParking().equals("Yes") && !patchRestaurantConvenienceReq.getIsParking().equals("No")){
+                return new BaseResponse<>(PATCH_RESTAURANTS_INVALID_ISPARKING);
+            }
+            if (!isRegexTime(patchRestaurantConvenienceReq.getBreakTimeEnd())|| !isRegexTime(patchRestaurantConvenienceReq.getBreakTimeStart())
+            || !isRegexTime(patchRestaurantConvenienceReq.getCloseHour()) || !isRegexTime(patchRestaurantConvenienceReq.getOpenHour())){
+                return new BaseResponse<>(PATCH_RESTAURANTS_INVALID_TIME);
+            }
+
+            if(!patchRestaurantConvenienceReq.getOffDays().equals("월") && !patchRestaurantConvenienceReq.getOffDays().equals("화") &&
+                    !patchRestaurantConvenienceReq.getOffDays().equals("수") && !patchRestaurantConvenienceReq.getOffDays().equals("목") &&
+                    !patchRestaurantConvenienceReq.getOffDays().equals("금") && !patchRestaurantConvenienceReq.getOffDays().equals("토") &&
+                    !patchRestaurantConvenienceReq.getOffDays().equals("일")){
+                return new BaseResponse<>(PATCH_RESTAURANTS_INVALID_DAYS);
+            }
+
             restaurantsService.patchConvenience(id, patchRestaurantConvenienceReq);
             String result = "";
             return new BaseResponse<>(result);

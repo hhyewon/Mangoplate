@@ -73,7 +73,7 @@ public class RestaurantsService {
             int result =restaurantsDao.patchConvenience(id, patchRestaurantConvenienceReq);
         }
         catch (Exception exception) {
-            throw new BaseException(FAILED_TO_RESTAURANT_LIKE);
+            throw new BaseException(FAILED_TO_MODIFY_RESTAURANT_CONVENIENCE);
         }
     }
 
@@ -84,7 +84,7 @@ public class RestaurantsService {
         }
         catch (Exception exception) {
             System.out.println(exception);
-            throw new BaseException(FAILED_TO_RESTAURANT_LIKE);
+            throw new BaseException(FAILED_TO_MODIFY_RESTAURANT_MENU_);
         }
     }
 
