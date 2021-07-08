@@ -9,7 +9,7 @@
 
 
 
-### REST API
+## ✨ REST API
 REST API의 기본 구성 원리를 반드시 구글링하여 익힌 뒤에 Route를 구성하자.
 
 ### Folder Structure
