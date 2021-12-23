@@ -19,7 +19,7 @@
 
 
 
-## 📌 REST API
+## 📌 REST API 
 
 ### Folder Structure
 - `src`: 메인 로직
